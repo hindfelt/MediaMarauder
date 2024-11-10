@@ -29,5 +29,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: hindfelt/svtdl:latest
+          tags: mathin/svtdl:latest
           platforms: linux/amd64,linux/arm64
