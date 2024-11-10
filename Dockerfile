@@ -4,15 +4,18 @@ FROM python:3.9-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Copy the requirements file first, if you have one (for dependency caching)
+COPY requirements.txt /app/
 
 # Install any needed packages specified in requirements.txt
+# This assumes you have a requirements.txt file in your project
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port 80 (or the port your app uses)
-EXPOSE 80
+# Copy the rest of the application code into the container
+COPY . /app
 
-# Run your main application file when the container launches
-CMD ["python", "app.py"] 
+# Expose port 80 (or whatever port your app runs on)
+EXPOSE 5000
 
+# Run the application
+CMD ["python", "app.py"]
