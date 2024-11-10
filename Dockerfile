@@ -14,5 +14,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 80
 
 # Run your main application file when the container launches
-CMD ["python", "main.py"]  # Replace 'main.py' with your app's entry point
+CMD ["python", "app.py"] 
 
