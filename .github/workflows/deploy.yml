@@ -26,8 +26,8 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
         with:
-          context: ./app
-          file: ./app/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: hindfelt/svtdl:latest
           platforms: linux/amd64,linux/arm64
