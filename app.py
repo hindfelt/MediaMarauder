@@ -1,39 +1,47 @@
 from flask import Flask, request, jsonify
-import threading
-import time
-from download import check_for_files, downloaded_files
+from threading import Thread
+from download import Downloader
 
 app = Flask(__name__)
-url_queue = []
-downloaded_files = []
+downloader = Downloader()
 
-@app.route("/svtdl-hook", methods=["POST"])
+
+@app.route('/svtdl-hook', methods=['POST'])
 def webhook():
+    """
+    Add a URL to the download queue.
+    """
     data = request.json
-    url = data.get("url")
+    url = data.get('url')
     if url:
-        url_queue.append(url)
+        downloader.add_to_queue(url)
         return jsonify({"status": "URL added to the queue"}), 200
     return jsonify({"error": "Invalid data"}), 400
 
-@app.route("/status", methods=["GET"])
+
+@app.route('/status', methods=['GET'])
 def status():
+    """
+    Return the current download queue and completed downloads.
+    """
     return jsonify({
-        "queue": url_queue,
-        "downloaded_files": downloaded_files
+        "queue": downloader.get_queue(),
+        "downloaded_files": downloader.get_downloaded_files()
     })
 
 
-def poll_urls():
-    while True:
-        if url_queue:
-            url = url_queue.pop(0)
-            print(f"Processing URL: {url}")
-            # check_for_files(url)
-        time.sleep(120)  # Poll every 2 minutes
+@app.route('/process-queue', methods=['POST'])
+def process_queue():
+    """
+    Start processing the queue in a separate thread.
+    """
+    if not downloader.is_processing():
+        thread = Thread(target=downloader.process_queue)
+        thread.daemon = True
+        thread.start()
+        return jsonify({"status": "Processing started"}), 200
+    return jsonify({"status": "Already processing"}), 200
 
-# Start polling in a separate thread
-threading.Thread(target=poll_urls, daemon=True).start()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8181)
