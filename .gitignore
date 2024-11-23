@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+Deep-Live-Cam/
+node_modules/
