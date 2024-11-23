@@ -1,9 +1,31 @@
-document.getElementById("refresh").addEventListener("click", () => {
-    fetch("https://192.168.0.198:8080/status") // Replace with your actual server URL
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("status").innerText = JSON.stringify(data, null, 2);
-      })
-      .catch((error) => console.error("Error fetching status:", error));
-  });
-  
+document.addEventListener('DOMContentLoaded', function() {
+    // Get current tab URL and send it to webhook
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        const currentUrl = tabs[0].url;
+        
+        fetch('http://localhost:8080/svtdl-hook', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: currentUrl })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            document.body.innerHTML = 'URL sent successfully: ' + currentUrl;
+            console.log(currentUrl);
+               // Close the popup after 3 seconds
+            setTimeout(() => {
+                window.close();
+            }, 3000);
+        })
+        .catch(error => {
+            document.body.innerHTML = 'Error sending URL: ' + error.message;
+            setTimeout(() => {
+                window.close();
+            }, 3000);
+        });
+    });
+});

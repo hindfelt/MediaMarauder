@@ -29,11 +29,11 @@ def poll_urls():
         if url_queue:
             url = url_queue.pop(0)
             print(f"Processing URL: {url}")
-            check_for_files(url)
+            # check_for_files(url)
         time.sleep(120)  # Poll every 2 minutes
 
 # Start polling in a separate thread
 threading.Thread(target=poll_urls, daemon=True).start()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=8080)

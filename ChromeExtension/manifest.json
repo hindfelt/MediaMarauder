@@ -1,0 +1,23 @@
+// manifest.json
+{
+    "name": "URL to Webhook",
+    "version": "1.0",
+    "manifest_version": 3,
+    "description": "Sends current tab URL to a webhook",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "tabs"
+    ],
+    "host_permissions": [
+        "http://localhost/*"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon.png",
+            "48": "icon.png",
+            "128": "icon.png"
+        }
+    }
+}

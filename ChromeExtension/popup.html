@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL to Webhook</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        #webhookUrl {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        
+        #sendButton {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        #sendButton:hover {
+            background-color: #45a049;
+        }
+        
+        #sendButton:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #statusButton {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        #statusButton:hover {
+            background-color: #45a049;
+        }
+        
+        #statusButton:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="sendButton">Send URL</button>
+        <button id="statusButton">Show Status</button>
+        <div id="status"></div>
+    </div> 
+    <script src="popup.js"></script>
+</body>
+</html>
