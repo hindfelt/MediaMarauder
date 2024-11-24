@@ -51,7 +51,6 @@ def start_queue_processor():
     thread.daemon = True  # Ensure the thread exits when the app stops
     thread.start()
 
-
 if __name__ == "__main__":
     start_queue_processor()  # Start queue processor automatically
     app.run(host="0.0.0.0", port=5000)

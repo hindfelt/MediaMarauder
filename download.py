@@ -71,7 +71,7 @@ class Downloader:
                 self.downloaded_files.append({"url": url, "status": f"Error: {e.stderr}"})
             return False
 
-def process_queue(self):
+    def process_queue(self):
         """
         Continuously check the queue and process downloads when there are URLs.
         """
