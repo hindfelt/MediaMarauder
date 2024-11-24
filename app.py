@@ -43,5 +43,15 @@ def process_queue():
     return jsonify({"status": "Already processing"}), 200
 
 
+def start_queue_processor():
+    """
+    Automatically start the queue processor in a background thread.
+    """
+    thread = Thread(target=downloader.process_queue)
+    thread.daemon = True  # Ensure the thread exits when the app stops
+    thread.start()
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8181)
+    start_queue_processor()  # Start queue processor automatically
+    app.run(host="0.0.0.0", port=5000)
