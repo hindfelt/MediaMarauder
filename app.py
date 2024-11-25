@@ -46,11 +46,13 @@ def process_queue():
 def start_queue_processor():
     """
     Automatically start the queue processor in a background thread.
+    And dance a little
     """
     thread = Thread(target=downloader.process_queue)
     thread.daemon = True  # Ensure the thread exits when the app stops
     thread.start()
 
+
 if __name__ == "__main__":
     start_queue_processor()  # Start queue processor automatically
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, ssl_context=('/app/cert.pem', '/app/key.pem'))
