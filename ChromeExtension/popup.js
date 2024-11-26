@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         const currentUrl = tabs[0].url;
         
-        fetch('https://hardly.access.ly/svtdl-hook', {
+        fetch('https://0x4d.in/svtdl-hook', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
