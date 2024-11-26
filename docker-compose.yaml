@@ -3,7 +3,12 @@ services:
   python-app:
     build: .
     ports:
-      - "5000:5000"
+      - "443:5000"
     volumes:
       - .:/app
+      - /etc/letsencrypt/archive/0x4d.in:/app/certs
+    environment:
+      - SSL_CERT_FILE=/app/certs/fullchain.pem
+      - SSL_KEY_FILE=/app/certs/privkey.pem
     restart: unless-stopped
+    
