@@ -3,3 +3,7 @@ __pycache__/
 Deep-Live-Cam/
 node_modules/
 Deep-Live-Cam
+*.pem
+*.key
+*.crt
+
