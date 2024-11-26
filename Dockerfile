@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y curl \
 
 # Copy the rest of the application code into the container
 COPY . /app
+COPY app.py /app/
+COPY download.py /app/
+COPY config.py /app/
 
 # Expose port 80 (or whatever port your app runs on)
 EXPOSE 5000
