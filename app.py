@@ -55,4 +55,4 @@ def start_queue_processor():
 
 if __name__ == "__main__":
     start_queue_processor()  # Start queue processor automatically
-    app.run(host="0.0.0.0", port=5000, ssl_context=('/app/cert.pem', '/app/key.pem'))
+    app.run(host="0.0.0.0", port=5000, ssl_context=('/etc/ssl/certs/0x4d.in/fullchain.pem', '/etc/ssl/certs/0x4d.in/privkey.pem'))
