@@ -16,11 +16,9 @@ RUN apt-get update && apt-get install -y curl \
     && curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp \
     && chmod a+rx /usr/local/bin/yt-dlp
 
+
 # Copy the rest of the application code into the container
 COPY . /app
-COPY app.py /app/
-COPY download.py /app/
-COPY config.py /app/
 
 # Expose port 80 (or whatever port your app runs on)
 EXPOSE 5000
