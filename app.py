@@ -1,10 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from threading import Thread
 from download import Downloader
 
 app = Flask(__name__)
 downloader = Downloader()
 
+@app.route('/')
+def home():
+    """
+    Serve the default homepage from a template file.
+    """
+    return render_template('index.html')
 
 @app.route('/svtdl-hook', methods=['POST'])
 def webhook():
