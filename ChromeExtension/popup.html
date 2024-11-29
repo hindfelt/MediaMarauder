@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL to Webhook</title>
+    <title>Subtitle Downloader</title>
     <style>
         body {
             width: 300px;
@@ -14,11 +14,6 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
         }
         button {
             padding: 10px;
@@ -34,6 +29,10 @@
         button:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+        }
+        .language-button {
+            margin-top: 5px;
+            background-color: #008CBA;
         }
         #status {
             margin-top: 10px;
@@ -55,9 +54,14 @@
     <div class="container">
         <input id="serverUrl" type="text" placeholder="Enter server URL" />
         <button id="saveServerUrlButton">Save Server URL</button>
-        <button id="sendUrlButton" disabled>Send URL</button>
+        <h3>Choose Subtitle Language:</h3>
+        <div>
+            <button class="language-button" data-lang="sv">sv</button>
+            <button class="language-button" data-lang="en">en</button>
+            <button class="language-button" data-lang="de">de</button>
+        </div>
         <div id="status"></div>
     </div>
-    <script src="popup.js" defer></script>
+    <script src="popup.js"></script>
 </body>
 </html>

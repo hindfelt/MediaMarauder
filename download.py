@@ -9,14 +9,15 @@ class Downloader:
         self.url_queue = []
         self.downloaded_files = []
         self.processing = False
+        self.stop_processing_flag = False  # Initialize stop flag
         self.lock = threading.Lock()  # To ensure thread-safe queue handling
 
-    def add_to_queue(self, url):
+    def add_to_queue(self, item):
         """
         Add a URL to the download queue.
         """
         with self.lock:
-            self.url_queue.append(url)
+            self.url_queue.append(item)
 
     def get_queue(self):
         """
@@ -38,18 +39,24 @@ class Downloader:
         """
         return self.processing
 
-    def download_file(self, url):
+    def download_file(self, url, subtitle_lang=None):
         """
         Download a file using yt-dlp.
         """
+        print('Lnagugage: ', subtitle_lang)
         try:
             yt_dlp_command = [
                 "yt-dlp",
-                "-f", "bv*[ext=mp4][vcodec^=avc1]+ba[ext=m4a]/b[ext=mp4]",
                 "-S", "codec:h264",
-                "-o", f"{DOWNLOAD_PATH}/%(title)s.%(ext)s",  # Save to configured path
+                "-o", f"{DOWNLOAD_PATH}/%(title)s.%(ext)s", 
+                "--format", "bestvideo*+bestaudio[language!=?sv-x-tal]", # Save to configured path
                 url
             ]
+            
+            if subtitle_lang:
+                yt_dlp_command.extend(["--convert-subs", "srt","--write-subs", "--sub-lang", subtitle_lang])
+            
+            print(yt_dlp_command)
 
             # Run yt-dlp command
             result = subprocess.run(
@@ -62,7 +69,7 @@ class Downloader:
 
             print(f"yt-dlp output:\n{result.stdout}")
             with self.lock:
-                self.downloaded_files.append({"url": url, "status": "Downloaded"})
+                self.downloaded_files.append({"url": url, "status": "Downloaded", "sub": subtitle_lang if subtitle_lang else "none" })
             return True
 
         except subprocess.CalledProcessError as e:
@@ -70,7 +77,13 @@ class Downloader:
             with self.lock:
                 self.downloaded_files.append({"url": url, "status": f"Error: {e.stderr}"})
             return False
-
+    
+    def stop_processing(self):
+        """
+        Signal the queue processor to stop.
+        """
+        self.stop_processing_flag = True
+    
     def process_queue(self):
         """
         Continuously check the queue and process downloads when there are URLs.
@@ -81,17 +94,19 @@ class Downloader:
         while True:
             with self.lock:
                 if self.url_queue:
-                    url = self.url_queue.pop(0)
+                    item = self.url_queue.pop(0)
+                    print(f"Queue contents: {self.url_queue}")
+                    url, subtitle_lang = item  # Extract URL and subtitle language
                 else:
-                    url = None
+                    item = None
 
-            if url:
-                print(f"Processing URL: {url}")
-                self.download_file(url)
+            if item:
+                print(f"Processing URL: {url} with subtitles: {subtitle_lang}")
+                self.download_file(url, subtitle_lang + '.*' if subtitle_lang else None)
                 time.sleep(1)  # Add a small delay to avoid rapid processing
             else:
                 # If the queue is empty, wait before checking again
                 time.sleep(5)
 
-        # This line will never be reached because the loop runs indefinitely
         self.processing = False
+        print("Queue processor stopped.")
