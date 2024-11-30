@@ -1,0 +1,3 @@
+yt-dlp --convert-subs srt --write-sub --sub-lang "sv.*" https://www.svtplay.se/video/KrJYRPG/du-behover-inte-vara-radd?video=visa
+
+https://www.svtplay.se/video/e6YLQ4P/gudar-och-manniskor?video=visa

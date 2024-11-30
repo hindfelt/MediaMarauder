@@ -1,7 +1,10 @@
 import subprocess
+import os
+import re
 import time
 import threading
 from config import DOWNLOAD_PATH
+from urllib.parse import urlparse, unquote
 
 
 class Downloader:
@@ -12,6 +15,31 @@ class Downloader:
         self.stop_processing_flag = False  # Initialize stop flag
         self.lock = threading.Lock()  # To ensure thread-safe queue handling
 
+    def sanitize_filename(self,url):
+        """
+        Extract a meaningful filename from the URL.
+        """
+        # Parse the URL
+        parsed_url = urlparse(url)
+        print("--------------------------------")
+        # Get the path part of the URL and split it into components
+        path_parts = parsed_url.path.split('/')
+        print(f"path: ' {path_parts}")
+
+        # Assume the meaningful part is the last segment in the path
+        raw_filename = path_parts[-1]
+        print(f"raw filename: ' {raw_filename}")
+
+        # Decode URL-encoded parts (e.g., %20 -> space)
+        decoded_filename = unquote(raw_filename)
+        print(f"decoded filename: ' {decoded_filename}")
+
+        # Remove unwanted characters (e.g., square brackets, special chars)
+        sanitized_filename = re.sub(r'[<>:"/\\|?*]', '', decoded_filename).strip()
+        print("sanitized filedname: ", sanitized_filename)
+        print("--------------------------------")
+        return sanitized_filename
+ 
     def add_to_queue(self, item):
         """
         Add a URL to the download queue.
@@ -39,19 +67,56 @@ class Downloader:
         """
         return self.processing
 
+    def save_file_in_series_folder(self, sanitized_filename):
+        """
+        Creates series folder and saves the episode file within it.
+        """
+        base_folder = "./"
+        
+        print("--------------------------------")
+        # Extract series and episode namesç
+        #series_name, episode_title = extract_series_and_filename(url)
+        print(f"sanitized_filename in save_file_in_series_folder: {sanitized_filename}")
+        # Create a folder for the series
+        series_folder = os.path.join(base_folder, sanitized_filename)
+        print(f"series_folder in save_file_in_series_folder: {series_folder}")
+    
+        print(f"Base folder writable: {os.access(base_folder, os.W_OK)}")
+        print(f"Series folder path: {series_folder}")
+        print(f"Is series folder writable: {os.access(os.path.dirname(series_folder), os.W_OK)}")
+        #os.makedirs(series_folder, exist_ok=True)
+
+        # Full path to the file
+        file_path = os.path.join(series_folder, sanitized_filename)
+        print(f"file_path in save_file_in_series_folder: {file_path}")
+        print("--------------------------------")
+    
+        return file_path
+
     def download_file(self, url, subtitle_lang=None):
         """
         Download a file using yt-dlp.
         """
-        print('Lnagugage: ', subtitle_lang)
+        print("--------------------------------")
+        print('Langugage: ', subtitle_lang)
+
+         # Assume `filename` is extracted from the URL
+        print(f"url: {url}")
+        sanitized_filename = self.sanitize_filename(url) 
+        print(f"sanitized_filename: {sanitized_filename}")
+        sanitized_folder = self.save_file_in_series_folder(sanitized_filename)
+        print(f"sanitized_folder: {sanitized_folder}")
+        # Save the file with the sanitized name
+        filepath = os.path.join("/app/downloads", sanitized_filename)
+        
         try:
             yt_dlp_command = [
                 "yt-dlp",
                 "-S", "codec:h264",
-                "-o", f"{DOWNLOAD_PATH}/%(title)s.%(ext)s", 
+                # "-o", f"{DOWNLOAD_PATH}/{sanitized_filename}.%(ext)s", 
+                "-o", f"{DOWNLOAD_PATH}/{sanitized_folder}%(title)s.%(ext)s", 
                 "--format", "bestvideo*+bestaudio[language!=?sv-x-tal]", # Save to configured path
-                "--yes-playlist",
-                url
+                "--yes-playlist", url
             ]
             
             if subtitle_lang:
@@ -69,6 +134,7 @@ class Downloader:
             )
 
             print(f"yt-dlp output:\n{result.stdout}")
+            print("--------------------------------")
             with self.lock:
                 self.downloaded_files.append({"url": url, "status": "Downloaded", "sub": subtitle_lang if subtitle_lang else "none" })
             return True
