@@ -50,6 +50,7 @@ class Downloader:
                 "-S", "codec:h264",
                 "-o", f"{DOWNLOAD_PATH}/%(title)s.%(ext)s", 
                 "--format", "bestvideo*+bestaudio[language!=?sv-x-tal]", # Save to configured path
+                "--yes-playlist",
                 url
             ]
             
