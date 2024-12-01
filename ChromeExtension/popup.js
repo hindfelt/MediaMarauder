@@ -107,8 +107,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             statusDiv.className = 'error';
                             return;
                         }
-                        console.log("ready to post  to webhook")
-                        fetch(`${serverUrl}/svtdl-hook`, {
+                        console.log("ready to post to webhook")
+                        fetch(`${serverUrl}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
