@@ -29,5 +29,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: mathin/svtdl:latest
+          tags: mathin/mediamarauder:latest
           platforms: linux/amd64,linux/arm64
