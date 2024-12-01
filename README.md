@@ -13,7 +13,7 @@ Suggest to secure it with HTTPS via Caddy.
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `url` | `url` | **Required**. Url to stream |
-| `subtitle_lang` | `` | Language (ie 'en'/'de' etc) |
+| `subtitle_lang` | `lang abbriviation` | Language (ie 'en'/'de'/'fr' etc) |
 
 
 ```https
