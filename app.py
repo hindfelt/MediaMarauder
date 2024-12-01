@@ -16,6 +16,10 @@ def home():
 
 @app.route('/svtdl-hook', methods=['POST'])
 def webhook():
+    token = request.headers.get("Auth")
+    if not token or token not in API_TOKENS.values():
+        return jsonify({"Error": "Unauthorized"}), 401
+    
     try: 
         """
         Add a URL to the download queue.
