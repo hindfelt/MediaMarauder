@@ -4,8 +4,6 @@ from urllib.parse import urlparse, unquote
 import requests
 from config import WHITELISTED_DOMAINS
 
-# Allowed domains for URL validation
-ALLOWED_DOMAINS = ["svtplay.se"]
 
 class SecurityUtils:
     @staticmethod
