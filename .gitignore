@@ -8,3 +8,6 @@ Deep-Live-Cam
 *.key
 *.crt
 downloads/
+*.sh
+docker-compose.yaml
+
