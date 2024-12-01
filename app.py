@@ -3,6 +3,8 @@ from threading import Thread
 from download import Downloader
 from securityUtils import SecurityUtils
 from config import API_TOKENS
+from config import WEBHOOK_PATH
+from config import STATUS_PATH
 
 
 app = Flask(__name__)
@@ -15,7 +17,7 @@ def home():
     """
     return render_template('index.html')
 
-@app.route('/svtdl-hook', methods=['POST'])
+@app.route(WEBHOOK_PATH, methods=['POST'])
 def webhook():
     token = request.headers.get("Auth")
     if not token or token not in API_TOKENS.values():
@@ -51,7 +53,7 @@ def validateurl(url):
         print(f"Security validation failed for URL: {e}")
         return False
 
-@app.route('/status', methods=['POST'])
+@app.route(STATUS_PATH, methods=['POST'])
 def status():
     token = request.headers.get("Auth")
     if not token or token not in API_TOKENS.values():
