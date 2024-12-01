@@ -16,17 +16,26 @@ def home():
 
 @app.route('/svtdl-hook', methods=['POST'])
 def webhook():
-    """
-    Add a URL to the download queue.
-    """
-    data = request.json
-    url = data.get('url')
-    subtitle_lang = data.get('subtitle_lang')
-    
-    if url and validate_url(url):
+    try: 
+        """
+        Add a URL to the download queue.
+        """
+        data = request.json
+        url = data.get('url')
+        subtitle_lang = data.get('subtitle_lang')
+        
+        if not url
+            return jsonify({"Error": "Missing URL"}), 400
+        
+        # sec validation
+        SecurityUtils.validate_url(url)
+        
         downloader.add_to_queue((url, subtitle_lang or None))
         return jsonify({"status": "URL added to the queue with subtitles" if subtitle_lang else "URL added to the queue"}), 200
-    return jsonify({"error": "Invalid data"}), 400
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": "Internl Server Error", "details": str(e)}), 500
 
 def validateurl(url):
     try:
