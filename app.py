@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from threading import Thread
 from download import Downloader
+from security_utils import SecurityUtils
+
 
 app = Flask(__name__)
 downloader = Downloader()
@@ -20,11 +22,20 @@ def webhook():
     data = request.json
     url = data.get('url')
     subtitle_lang = data.get('subtitle_lang')
-    if url:
+    
+    if url and validate_url(url):
         downloader.add_to_queue((url, subtitle_lang or None))
         return jsonify({"status": "URL added to the queue with subtitles" if subtitle_lang else "URL added to the queue"}), 200
     return jsonify({"error": "Invalid data"}), 400
 
+def validateurl(url):
+    try:
+        print("----- validating security ---")
+        SecurityUtils.validate_url(url)  # validation logic
+        return True
+    except ValueError as e:
+        print(f"Security validation failed for URL: {e}")
+        return False
 
 @app.route('/status', methods=['GET'])
 def status():
