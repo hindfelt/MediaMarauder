@@ -6,6 +6,7 @@ WORKDIR /app
 
 # Copy the requirements file first, if you have one (for dependency caching)
 COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Install system dependencies, including ffmpeg
 RUN apt-get update && apt-get install -y \
