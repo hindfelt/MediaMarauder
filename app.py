@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from threading import Thread
 from download import Downloader
-from security_utils import SecurityUtils
+from securityUtils import SecurityUtils
+from config import API_TOKENS
 
 
 app = Flask(__name__)
@@ -28,7 +29,7 @@ def webhook():
         url = data.get('url')
         subtitle_lang = data.get('subtitle_lang')
         
-        if not url
+        if not url:
             return jsonify({"Error": "Missing URL"}), 400
         
         # sec validation
@@ -50,8 +51,11 @@ def validateurl(url):
         print(f"Security validation failed for URL: {e}")
         return False
 
-@app.route('/status', methods=['GET'])
+@app.route('/status', methods=['POST'])
 def status():
+    token = request.headers.get("Auth")
+    if not token or token not in API_TOKENS.values():
+        return jsonify({"Error": "Unauthorized"}), 401
     """
     Return the current download queue and completed downloads.
     """

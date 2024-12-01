@@ -2,7 +2,7 @@ import os
 import re
 from urllib.parse import urlparse, unquote
 import requests
-import config from WHITELISTED_DOMAINS
+from config import WHITELISTED_DOMAINS
 
 # Allowed domains for URL validation
 ALLOWED_DOMAINS = ["svtplay.se"]
@@ -26,6 +26,11 @@ class SecurityUtils:
         # Check if the domain is allowed
         if not any(parsed.netloc.endswith(domain) for domain in WHITELISTED_DOMAINS):
             raise ValueError(f"Domain not allowed: {parsed.netloc}")
+        
+        # Reject URLs with dangerous characters
+        if any(char in url for char in [';', '|', '&&']):
+            raise ValueError("Malicious characters detected in URL")
+
 
         return True
 
