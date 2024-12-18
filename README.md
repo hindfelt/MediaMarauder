@@ -1,10 +1,23 @@
-# MediaMarauder
+```
+███╗   ███╗███████╗██████╗ ██╗ █████╗ 
+████╗ ████║██╔════╝██╔══██╗██║██╔══██╗
+██╔████╔██║█████╗  ██║  ██║██║███████║
+██║╚██╔╝██║██╔══╝  ██║  ██║██║██╔══██║
+██║ ╚═╝ ██║███████╗██████╔╝██║██║  ██║
+╚═╝     ╚═╝╚══════╝╚═════╝ ╚═╝╚═╝  ╚═╝
+                                      
+███╗   ███╗ █████╗ ██████╗  █████╗ ██╗   ██╗██████╗ ███████╗██████╗ 
+████╗ ████║██╔══██╗██╔══██╗██╔══██╗██║   ██║██╔══██╗██╔════╝██╔══██╗
+██╔████╔██║███████║██████╔╝███████║██║   ██║██║  ██║█████╗  ██████╔╝
+██║╚██╔╝██║██╔══██║██╔══██╗██╔══██║██║   ██║██║  ██║██╔══╝  ██╔══██╗
+██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██║╚██████╔╝██████╔╝███████╗██║  ██║
+╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
+```
 
-A Dockerized video downloader system for offline viewing that processes URLs submitted via a Chrome extension. It downloads videos from supported platforms (using yt-dlp) with options for subtitles, using a Flask-based backend. The system features queue management, authentication (both token-based and Google OAuth), and organized storage.
+A Dockerized video downloader system for offline viewing that processes URLs submitted via a Chrome extension. It downloads videos from supported platforms (using yt-dlp) with options for subtitles, using a Flask-based backend. The system features queue management, authentication (Google OAuth), and organized storage.
 
 ## Features
 - Secure Google OAuth authentication
-- Token-based API authentication
 - Download queue management
 - Real-time status monitoring
 - Subtitle download support
@@ -28,39 +41,30 @@ A Dockerized video downloader system for offline viewing that processes URLs sub
 2. Create a new project or select an existing one
 3. Enable the Google OAuth API
 4. Go to "APIs & Services" → "Credentials"
-5. Create OAuth 2.0 Client ID credentials
+5. Create OAuth 2.0 Client ID credentials for a "Web application"
 6. Add authorized redirect URIs:
-   - `http://localhost:5000/google-auth`
-   - `http://127.0.0.1:5000/google-auth`
-7. Save your Client ID and Client Secret
+   - `http://localhost:5000/auth`
+   - `http://127.0.0.1:5000/auth`
+   - Add your production domain: `https://yourdomain.com/auth`
 
-### 2. Configuration Files
-
-#### Environment Variables
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-2. Fill in your `.env` file:
-   ```
-   GOOGLE_CLIENT_ID=your_client_id_here
-   GOOGLE_CLIENT_SECRET=your_client_secret_here
-   ALLOWED_EMAIL=your.email@gmail.com
-   ```
-
-#### Config.py Setup
-Create `config.py` (stored outside container):
+### 2. Configuration Setup
+Create `config.py`:
 ```python
-DOWNLOAD_PATH = "path"
-WEBHOOK_PATH = "/{webhook-name for adding urls}"
-STATUS_PATH = "/{status-hook name}"
+DOWNLOAD_PATH = "downloads"
+WEBHOOK_PATH = "/your-webhook-path"
+STATUS_PATH = "/your-status-path"
 WHITELISTED_DOMAINS = [
     "video-service.domain",
     "another-video-service.domain"
 ]
 API_TOKENS = {
-    "user": "token"
+    "user": "your-api-token"
 }
+
+# Google OAuth settings
+GOOGLE_CLIENT_ID = "your-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET = "GOCSPX-your-client-secret"
+ALLOWED_EMAIL = "your.email@gmail.com"
 ```
 
 ## API Reference
@@ -115,12 +119,11 @@ docker run -d --name mediamarauder --restart unless-stopped \
    ```
 
 ## Security
-- `.env` file excluded from git (via .gitignore)
-- Google OAuth authentication
-- API token validation for webhooks
+- Google OAuth authentication with email restriction
 - URL validation and security checks
 - HTTPS support via Caddy (recommended)
 - Whitelisted domains configuration
+- Secure configuration management
 
 ## Contributing
 1. Fork the repository
