@@ -2,8 +2,8 @@ from functools import wraps
 from flask import session, jsonify, redirect, url_for
 from authlib.integrations.flask_client import OAuth
 import os
-from dotenv import load_dotenv
 from authlib.integrations.base_client.errors import OAuthError
+from config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ALLOWED_EMAIL
 
 load_dotenv()
 
