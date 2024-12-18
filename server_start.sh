@@ -8,8 +8,7 @@ docker pull mathin/svtdl:latest
 docker pull containrrr/watchtower
 
 echo "Starting app container..."
-# old line:
-#docker run -d --name svtdl -p 8181:5000 -v /mnt/Filmer/!NYTT:/app/downloads --restart unless-stopped mathin/svtdl:latest
+
 docker run -d --name svtdl --restart unless-stopped \
  -p 5000:5000 \
  -v /mnt/Filmer/!NYTT:/app/downloads \

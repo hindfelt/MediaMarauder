@@ -1,2 +1,4 @@
 flask==3.0.0
 requests
+Authlib==1.0.1
+python-dotenv==0.19.0

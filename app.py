@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from threading import Thread
+from auth import init_auth
 from download import Downloader
 from securityUtils import SecurityUtils
 from config import API_TOKENS
@@ -9,6 +10,7 @@ from config import STATUS_PATH
 
 app = Flask(__name__)
 downloader = Downloader()
+login_required = init_auth(app)  # Initialize auth and get the decorator
 
 @app.route('/')
 def home():
@@ -53,11 +55,12 @@ def validateurl(url):
         print(f"Security validation failed for URL: {e}")
         return False
 
-@app.route(STATUS_PATH, methods=['POST'])
+@app.route(STATUS_PATH, methods=['POST','GET'])
+@login_required
 def status():
-    token = request.headers.get("Auth")
-    if not token or token not in API_TOKENS.values():
-        return jsonify({"Error": "Unauthorized"}), 401
+   # token = request.headers.get("Auth")
+   # if not token or token not in API_TOKENS.values():
+   #     return jsonify({"Error": "Unauthorized"}), 401
     """
     Return the current download queue and completed downloads.
     """
@@ -66,6 +69,10 @@ def status():
         "downloaded_files": downloader.get_downloaded_files()
     })
 
+@app.route('/status-page')
+@login_required
+def status_page():
+    return render_template('status.html', STATUS_PATH=STATUS_PATH)
 
 @app.route('/process-queue', methods=['POST'])
 def process_queue():

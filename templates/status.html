@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Download Status</title>
+</head>
+<body>
+    <h1>Download Status</h1>
+    <div id="status">Loading...</div>
+    <button onclick="window.location.href='/google-logout'">Logout</button>
+
+    <script>
+        function updateStatus() {
+            fetch('{{ STATUS_PATH }}', {  // Use the configured STATUS_PATH
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.status === 401) {
+                    window.location.href = '/google-login';
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    document.getElementById('status').innerHTML = `
+                        <h2>Queue</h2>
+                        <pre>${JSON.stringify(data.queue, null, 2)}</pre>
+                        <h2>Downloaded Files</h2>
+                        <pre>${JSON.stringify(data.downloaded_files, null, 2)}</pre>
+                    `;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Update status every 5 seconds
+        updateStatus();
+        setInterval(updateStatus, 5000);
+    </script>
+</body>
+</html>
