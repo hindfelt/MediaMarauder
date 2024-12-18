@@ -1,11 +1,9 @@
 from functools import wraps
 from flask import session, jsonify, redirect, url_for
 from authlib.integrations.flask_client import OAuth
-import os
 from authlib.integrations.base_client.errors import OAuthError
-from config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ALLOWED_EMAIL
-
-load_dotenv()
+import os
+from config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ALLOWED_EMAIL  # Import from config 
 
 def init_auth(app):
 
@@ -14,8 +12,8 @@ def init_auth(app):
     oauth = OAuth(app)
     google = oauth.register(
         name='google',
-        client_id=os.getenv('GOOGLE_CLIENT_ID'),
-        client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+        client_id=GOOGLE_CLIENT_ID,
+        client_secret=GOOGLE_CLIENT_SECRET,
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
         client_kwargs={'scope': 'openid email profile'}
     )
@@ -34,7 +32,7 @@ def init_auth(app):
             token = google.authorize_access_token()
             userinfo = token.get('userinfo')
             if userinfo:
-                allowed_email = os.getenv('ALLOWED_EMAIL')
+                allowed_email = ALLOWED_EMAIL
                 if allowed_email and userinfo['email'] != allowed_email:
                     return 'Unauthorized email', 401
                 session['user'] = userinfo
