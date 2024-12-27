@@ -10,4 +10,5 @@ Deep-Live-Cam
 downloads/
 *.sh
 docker-compose.yaml
+.env
 

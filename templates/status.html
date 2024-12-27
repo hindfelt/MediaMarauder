@@ -6,7 +6,7 @@
 <body>
     <h1>Download Status</h1>
     <div id="status">Loading...</div>
-    <button onclick="window.location.href='/google-logout'">Logout</button>
+    <button onclick="window.location.href='/logout'">Logout</button>
 
     <script>
         function updateStatus() {
@@ -16,7 +16,7 @@
             })
             .then(response => {
                 if (response.status === 401) {
-                    window.location.href = '/google-login';
+                    window.location.href = '/login';
                     return;
                 }
                 return response.json();
