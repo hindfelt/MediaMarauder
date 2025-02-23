@@ -1,3 +1,4 @@
+A Dockerized video downloader system for offline viewing that processes URLs submitted via a Chrome extension. It downloads videos from supported platforms (using yt-dlp) with options for subtitles, using a Flask-based backend. The system features queue management, authentication (Google OAuth), and organized storage.
 ```
 ███╗   ███╗███████╗██████╗ ██╗ █████╗ 
 ████╗ ████║██╔════╝██╔══██╗██║██╔══██╗
@@ -13,8 +14,6 @@
 ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██║╚██████╔╝██████╔╝███████╗██║  ██║
 ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
 ```
-
-A Dockerized video downloader system for offline viewing that processes URLs submitted via a Chrome extension. It downloads videos from supported platforms (using yt-dlp) with options for subtitles, using a Flask-based backend. The system features queue management, authentication (Google OAuth), and organized storage.
 
 ## Features
 - Secure Google OAuth authentication
