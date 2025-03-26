@@ -1,6 +1,6 @@
 #flask==3.0.0
 flask==2.0.1    # Specify older version that works with Authlib
-werkzeug==2.0.3
+werkzeug==3.0.6
 requests
 Authlib==1.0.1
 python-dotenv==0.19.0
