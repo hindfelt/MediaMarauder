@@ -2,5 +2,5 @@
 flask==2.2.5 # Was 2.0.1 so testing if 2.2.5 version works with Authlib
 werkzeug==3.0.6
 requests
-Authlib==1.0.1
+Authlib==1.3.1
 python-dotenv==0.19.0
