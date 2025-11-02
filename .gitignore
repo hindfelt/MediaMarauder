@@ -11,4 +11,6 @@ downloads/
 *.sh
 docker-compose.yaml
 .env
+.DS_Store
+GEMINI.md
 
