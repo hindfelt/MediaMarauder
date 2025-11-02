@@ -66,7 +66,9 @@ def status():
     """
     return jsonify({
         "queue": downloader.get_queue(),
-        "downloaded_files": downloader.get_downloaded_files()
+        "downloaded_files": downloader.get_downloaded_files(),
+        "current_status": downloader.get_current_download_status(),
+        "current_download_percentage": downloader.get_current_download_percentage()
     })
 
 @app.route('/status-page')

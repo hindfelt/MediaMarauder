@@ -7,6 +7,11 @@
     <h1>Download Status</h1>
     <button onclick="window.location.href='/logout'">Logout</button>
     <div id="status">Loading...</div>
+    <div id="ongoing-downloads" style="display: none;">
+        <h2>Ongoing Downloads</h2>
+        <progress id="download-progress" value="0" max="100"></progress>
+        <span id="progress-percentage">0%</span>
+    </div>
 
     <script>
         let redirecting = false;  // Add flag to prevent multiple redirects
@@ -32,11 +37,20 @@
             .then(data => {
                 if (data) {
                     document.getElementById('status').innerHTML = `
+                        <h2>Current Status</h2>
+                        <pre>${data.current_status}</pre>
                         <h2>Queue</h2>
                         <pre>${JSON.stringify(data.queue, null, 2)}</pre>
                         <h2>Downloaded Files</h2>
                         <pre>${JSON.stringify(data.downloaded_files, null, 2)}</pre>
                     `;
+                    if (data.current_download_percentage > 0) {
+                        document.getElementById('ongoing-downloads').style.display = 'block';
+                        document.getElementById('download-progress').value = data.current_download_percentage;
+                        document.getElementById('progress-percentage').textContent = data.current_download_percentage + '%';
+                    } else {
+                        document.getElementById('ongoing-downloads').style.display = 'none';
+                    }
                 }
             })
             .catch(error => {
@@ -48,12 +62,12 @@
         // Initial update
         updateStatus();
         
-        // Update every 5 seconds, but only if we're not at the login page
+        // Update every 1 second, but only if we're not at the login page
         const intervalId = setInterval(() => {
             if (!window.location.pathname.includes('/login')) {
                 updateStatus();
             }
-        }, 5000);
+        }, 1000);
     </script>
 </body>
 </html>
