@@ -108,8 +108,83 @@ class Downloader:
     
         return file_path
 
-    def download_file(self, url, subtitle_lang=None):\n        \"\"\"\n        Download a file using yt-dlp.\n        \"\"\"\n        with self.lock:\n            self.current_download_status = f\"Starting download for {url}\"\n            self.current_download_percentage = 0\n\n        print(\"--------------------------------\")\n        print('Langugage: ', subtitle_lang)\n\n         # Assume `filename` is extracted from the URL\n        print(f\"url: {url}\")\n        sanitized_filename = self.sanitize_filename(url) \n        print(f\"sanitized_filename: {sanitized_filename}\")\n        sanitized_folder = self.save_file_in_series_folder(sanitized_filename)\n        print(f\"sanitized_folder: {sanitized_folder}\")\n        # Save the file with the sanitized name\n        filepath = os.path.join(\"/app/downloads\", sanitized_filename)\n        \n        try:\n            with self.lock:\n                self.current_download_status = f\"Downloading {url}...\"\n            yt_dlp_command = [\n                \"yt-dlp\",\n                \"--progress\",\n                \"-o\", f\"{DOWNLOAD_PATH}/{sanitized_folder}%(title)s.%(ext)s\",\n                \"--recode-video\", \"mp4\",\n                \"--yes-playlist\", url,\n            ]\n            \n            if subtitle_lang:\n                yt_dlp_command.extend([\"--write-subs\", \"--sub-lang\", subtitle_lang, \"--convert-subs\", \"srt\"])\n            \n            print(yt_dlp_command)\n\n            process = subprocess.Popen(\n                yt_dlp_command,\n                stdout=subprocess.PIPE,\n                stderr=subprocess.PIPE,\n                text=True,\n                bufsize=1,\n                universal_newlines=True\n            )\n\n            for line in process.stdout:\n                print(line, end='')\n                match = re.search(r\"\[download\]\\s+([0-9.]+)%\", line)\n                if match:\n                    with self.lock:\n                        self.current_download_percentage = float(match.group(1))\n\n            process.wait()\n\n            if process.returncode == 0:\n                with self.lock:\n                    self.downloaded_files.append({\"url\": url, \"status\": \"Downloaded\", \"sub\": subtitle_lang if subtitle_lang else \"none\" })\n                    self.current_download_status = f\"Download completed for {url}\"\n                    self.current_download_percentage = 100\n                return True\n            else:\n                error_output = process.stderr.read()\n                print(f\"Error running yt-dlp: {error_output}\")\n                with self.lock:\n                    self.downloaded_files.append({\"url\": url, \"status\": f\"Error: {error_output}\"})\n                    self.current_download_status = f\"Error downloading {url}: {error_output}\"\n                    self.current_download_percentage = 0\n                return False\n\n        except Exception as e:\n            print(f\"An unexpected error occurred: {e}\")\n            with self.lock:\n                self.downloaded_files.append({\"url\": url, \"status\": f\"Error: {e}\"})\n                self.current_download_status = f\"Error downloading {url}: {e}\"\n                self.current_download_percentage = 0\n            return False
-    
+   def download_file(self, url, subtitle_lang=None):
+    """
+    Download a file using yt-dlp.
+    """
+    with self.lock:
+        self.current_download_status = f"Starting download for {url}"
+        self.current_download_percentage = 0
+
+    print("--------------------------------")
+    print('Language: ', subtitle_lang)
+
+    # Assume `filename` is extracted from the URL
+    print(f"url: {url}")
+    sanitized_filename = self.sanitize_filename(url)
+    print(f"sanitized_filename: {sanitized_filename}")
+    sanitized_folder = self.save_file_in_series_folder(sanitized_filename)
+    print(f"sanitized_folder: {sanitized_folder}")
+    # Save the file with the sanitized name
+    filepath = os.path.join("/app/downloads", sanitized_filename)
+
+    try:
+        with self.lock:
+            self.current_download_status = f"Downloading {url}..."
+        yt_dlp_command = [
+            "yt-dlp",
+            "--progress",
+            "-o", f"{DOWNLOAD_PATH}/{sanitized_folder}%(title)s.%(ext)s",
+            "--recode-video", "mp4",
+            "--yes-playlist", url,
+        ]
+
+        if subtitle_lang:
+            yt_dlp_command.extend(["--write-subs", "--sub-lang", subtitle_lang, "--convert-subs", "srt"])
+
+        print(yt_dlp_command)
+
+        process = subprocess.Popen(
+            yt_dlp_command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1,
+            universal_newlines=True
+        )
+
+        for line in process.stdout:
+            print(line, end='')
+            match = re.search(r"\[download\]\s+([0-9.]+)%", line)
+            if match:
+                with self.lock:
+                    self.current_download_percentage = float(match.group(1))
+
+        process.wait()
+
+        if process.returncode == 0:
+            with self.lock:
+                self.downloaded_files.append({"url": url, "status": "Downloaded", "sub": subtitle_lang if subtitle_lang else "none"})
+                self.current_download_status = f"Download completed for {url}"
+                self.current_download_percentage = 100
+            return True
+        else:
+            error_output = process.stderr.read()
+            print(f"Error running yt-dlp: {error_output}")
+            with self.lock:
+                self.downloaded_files.append({"url": url, "status": f"Error: {error_output}"})
+                self.current_download_status = f"Error downloading {url}: {error_output}"
+                self.current_download_percentage = 0
+            return False
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        with self.lock:
+            self.downloaded_files.append({"url": url, "status": f"Error: {e}"})
+            self.current_download_status = f"Error downloading {url}: {e}"
+            self.current_download_percentage = 0
+        return False
+        
     def stop_processing(self):
         """
         Signal the queue processor to stop.
