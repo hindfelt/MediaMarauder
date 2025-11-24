@@ -15,6 +15,7 @@ class Downloader:
         self.stop_processing_flag = False  # Initialize stop flag
         self.current_download_status = "Idle"
         self.current_download_percentage = 0
+        self.lock = threading.Lock()  # Initialize the lock for thread safety
 
     def get_current_download_percentage(self):
         """
@@ -184,7 +185,7 @@ class Downloader:
             self.current_download_status = f"Error downloading {url}: {e}"
             self.current_download_percentage = 0
         return False
-        
+
     def stop_processing(self):
         """
         Signal the queue processor to stop.
