@@ -148,7 +148,7 @@ class Downloader:
             process = subprocess.Popen(
                 yt_dlp_command,
                 stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                stderr=subprocess.STDOUT,  # Redirect stderr to stdout to prevent blocking
                 text=True,
                 bufsize=1,
                 universal_newlines=True
@@ -170,11 +170,11 @@ class Downloader:
                     self.current_download_percentage = 100
                 return True
             else:
-                error_output = process.stderr.read()
-                print(f"Error running yt-dlp: {error_output}")
+                error_msg = f"yt-dlp exited with code {process.returncode}"
+                print(f"Error running yt-dlp: {error_msg}")
                 with self.lock:
-                    self.downloaded_files.append({"url": url, "status": f"Error: {error_output}"})
-                    self.current_download_status = f"Error downloading {url}: {error_output}"
+                    self.downloaded_files.append({"url": url, "status": f"Error: {error_msg}"})
+                    self.current_download_status = f"Error downloading {url}: {error_msg}"
                     self.current_download_percentage = 0
                 return False
 
@@ -201,7 +201,7 @@ class Downloader:
         with self.lock:
             self.current_download_status = "Starting queue processor..."
 
-        while True:
+        while not self.stop_processing_flag:
             with self.lock:
                 if self.url_queue:
                     item = self.url_queue.pop(0)
