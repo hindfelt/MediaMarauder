@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Restore MediaMarauder to its original state
+
+echo "Restoring original index.html..."
+if [ -f "templates/index2.html" ]; then
+    rm "templates/index.html"
+    mv "templates/index2.html" "templates/index.html"
+    echo "✔ Restored templates/index.html"
+else
+    echo "⚠ templates/index2.html not found, skipping restore of index.html"
+fi
+
+echo "Cleaning up static assets..."
+if [ -d "static/assets" ]; then
+    rm -rf "static/assets"
+    echo "✔ Removed static/assets"
+else
+    echo "⚠ static/assets not found, nothing to clean"
+fi
+
+echo "Rollback complete."
