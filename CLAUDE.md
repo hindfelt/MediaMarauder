@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-MediaMarauder is a Dockerized video downloader system with a Flask backend that processes URLs submitted via a Chrome extension. It uses yt-dlp to download videos from supported platforms with optional subtitle support, Google OAuth authentication, and queue-based processing.
+MediaMarauder is a Dockerized video downloader system with a Flask backend that processes URLs submitted via a Chrome extension. It uses yt-dlp to download videos from supported platforms with optional subtitle support, Google OAuth authentication, queue-based processing, and real-time progress tracking with a modern web UI.
 
 ## Architecture
 
@@ -41,6 +41,13 @@ MediaMarauder is a Dockerized video downloader system with a Flask backend that 
    - `API_TOKENS` - authentication for webhook endpoint
    - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ALLOWED_EMAIL` - OAuth settings
 
+6. **templates/status.html** - Real-time status dashboard
+   - Modern card-based UI with responsive design
+   - Live progress bar with percentage tracking (updates every second)
+   - Animated "✓ Complete!" indicator when downloads finish
+   - XSS-protected using `escapeHtml()` function for all dynamic content
+   - Auto-hides progress section when idle or after completion
+
 ### Critical Implementation Details
 
 **Subprocess Blocking Fix (download.py:151)**
@@ -51,6 +58,9 @@ Queue processor starts automatically on app startup as a daemon thread. This ens
 
 **Thread Safety**
 The Downloader class uses `threading.Lock()` to protect shared state (`url_queue`, `downloaded_files`, `current_download_status`, `current_download_percentage`). All methods that read/write these use `with self.lock:` context managers.
+
+**Progress Bar Reset (download.py:218-220)**
+After each download completes, `current_download_percentage` is reset to 0. This ensures the progress bar section auto-hides on the status page, providing clean UX where the progress only shows during active downloads.
 
 ## Development Commands
 
