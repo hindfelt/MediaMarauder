@@ -215,6 +215,9 @@ class Downloader:
             if item:
                 print(f"Processing URL: {url} with subtitles: {subtitle_lang}")
                 self.download_file(url, subtitle_lang + '.*' if subtitle_lang else None)
+                # Reset percentage after download completes
+                with self.lock:
+                    self.current_download_percentage = 0
                 time.sleep(1)  # Add a small delay to avoid rapid processing
             else:
                 # If the queue is empty, wait before checking again
