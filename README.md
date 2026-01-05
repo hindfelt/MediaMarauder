@@ -124,6 +124,35 @@ docker run -d --name mediamarauder --restart unless-stopped \
 - Whitelisted domains configuration
 - Secure configuration management
 
+## Changelog
+
+### 2026-01-05
+**Critical Bug Fix: Download Blocking Issue**
+- **Fixed:** Downloads stopping mid-process due to subprocess stderr buffer blocking
+- **Solution:** Redirected stderr to stdout in yt-dlp subprocess (download.py:151)
+- **Impact:** Downloads now complete successfully regardless of size (tested with 3.9GB files)
+- **Testing:** Verified with YouTube and SVT Play downloads
+
+**Security Updates**
+- Updated `urllib3` to >=2.6.0 (fixes CVE-2025-66471, CVE-2025-66418)
+- Updated `werkzeug` to >=3.1.4 (fixes CVE-2025-66221)
+- All high and medium severity vulnerabilities resolved
+
+**UI/UX Improvements**
+- Added loader animation at `/` (0x4d.in loader integration)
+- Automatic redirect to landing page after 3 seconds
+- Added `/landing` route for simple landing page
+- Added login link on landing page for easier access to status page
+- Fixed HTML closing tag on Github link
+
+**Code Improvements**
+- Improved error handling to use process return codes
+- Enabled graceful queue processor shutdown via `stop_processing_flag`
+- Better error messages for failed downloads
+
+**Technical Details:**
+The subprocess blocking issue occurred when yt-dlp wrote warnings or errors to stderr. With stderr as a separate pipe, the buffer would fill and block indefinitely. By redirecting stderr to stdout (`stderr=subprocess.STDOUT`), all output flows through one stream that's actively consumed, preventing blocking.
+
 ## Contributing
 1. Fork the repository
 2. Create a feature branch
