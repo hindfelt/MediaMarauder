@@ -15,9 +15,16 @@ login_required = init_auth(app)  # Initialize auth and get the decorator
 @app.route('/')
 def home():
     """
-    Serve the default homepage from a template file!
+    Serve the loader page that redirects to landing
     """
     return render_template('index.html')
+
+@app.route('/landing')
+def landing():
+    """
+    Serve the landing page
+    """
+    return render_template('index2.html')
 
 @app.route(WEBHOOK_PATH, methods=['POST'])
 def webhook():
