@@ -49,7 +49,7 @@ A Dockerized video downloader system for offline viewing that processes URLs sub
 ### 2. Configuration Setup
 Create `config.py`:
 ```python
-DOWNLOAD_PATH = "downloads"
+DOWNLOAD_PATH = "/app/downloads"
 WEBHOOK_PATH = "/your-webhook-path"
 STATUS_PATH = "/your-status-path"
 WHITELISTED_DOMAINS = [
@@ -59,6 +59,9 @@ WHITELISTED_DOMAINS = [
 API_TOKENS = {
     "user": "your-api-token"
 }
+
+# Flask session secret key -- generate with: python -c "import os; print(os.urandom(24).hex())"
+SECRET_KEY = "your-secret-key-here"
 
 # Google OAuth settings
 GOOGLE_CLIENT_ID = "your-client-id.apps.googleusercontent.com"
@@ -80,8 +83,19 @@ POST /{WEBHOOK_PATH}
 
 ### Check Status
 ```http
-POST /{STATUS_PATH}
+GET /{STATUS_PATH}
 ```
+Requires Google OAuth login (browser session). A visual dashboard is available at `/status-page`.
+
+## Chrome Extension
+
+Load `ChromeExtension/` as an unpacked extension (chrome://extensions → Developer mode → Load unpacked).
+
+Configure in the popup:
+- **Server URL**: the FULL webhook URL, e.g. `https://yourdomain.com/your-webhook-path` (not the video page URL!)
+- **Token**: one of the values from `API_TOKENS` in `config.py`
+
+Optional: copy `ChromeExtension/defaults.example.js` to `defaults.js` and fill in your values to prefill both fields automatically. `defaults.js` is gitignored so secrets never reach the repo.
 
 ## Deployment
 
@@ -91,7 +105,7 @@ docker run -d --name mediamarauder --restart unless-stopped \
     -p 5000:5000 \
     -v /{path_to_download_mount}:/app/downloads \
     -v /{path_to_config}/config.py:/app/config.py \
-    --name mediamarauder mathin/mediamarauder:latest
+    mathin/mediamarauder:latest
 ```
 
 ### Local Development Setup
@@ -118,13 +132,31 @@ docker run -d --name mediamarauder --restart unless-stopped \
    ```
 
 ## Security
-- Google OAuth authentication with email restriction
-- URL validation and security checks
-- HTTPS support via Caddy (recommended)
-- Whitelisted domains configuration
-- Secure configuration management
+- Google OAuth authentication with email restriction (fails closed if `ALLOWED_EMAIL` unset)
+- Domain whitelist with strict dot-boundary matching (no suffix bypass)
+- Constant-time API token comparison
+- Validated subtitle language input before it reaches yt-dlp
+- Secure session cookies (Secure, HttpOnly, SameSite=Lax) -- requires HTTPS for login
+- HTTPS via Caddy or other TLS-terminating reverse proxy (required in production)
+- `.dockerignore` prevents secrets from being baked into images
+- Security test suite: `python test_security.py` (24 tests)
 
 ## Changelog
+
+### 2026-07-19
+**Security Hardening & Dependency Fixes**
+- **Fixed:** Domain whitelist bypass -- `evilyoutube.com` no longer matches `youtube.com`; matching now uses `parsed.hostname` with exact or dot-boundary comparison
+- **Fixed:** API token check now constant-time (`secrets.compare_digest`)
+- **Fixed:** 500 responses no longer leak exception details; errors logged server-side
+- **Fixed:** `subtitle_lang` validated (`[a-zA-Z]{2,3}`) before reaching yt-dlp argv
+- **Fixed:** OAuth fails closed when `ALLOWED_EMAIL` is unset; email compare case-insensitive
+- **Fixed:** Flask upgraded to >=3.1 (2.2.5 was incompatible with werkzeug >=3.1); Authlib 1.6.6; restored `requests` dependency
+- **Fixed:** `DOWNLOAD_PATH` joined with `os.path.join` (no more trailing-slash requirement)
+- **Added:** Secure/HttpOnly/SameSite session cookie flags
+- **Added:** `.dockerignore` (config.py, .git, venv, downloads excluded from images)
+- **Added:** `test_security.py` -- 24 tests covering URL validation, filename sanitization, queue handling
+- **Extension:** removed unused `scripting`/`tabs` permissions; optional `defaults.js` prefill for server URL and token
+- **Cleanup:** removed dead code, debug prints; status endpoint restricted to GET
 
 ### 2026-06-26
 **Code Cleanup & Configuration Improvements**
