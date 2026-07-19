@@ -14,3 +14,4 @@ docker-compose.yaml
 .DS_Store
 GEMINI.md
 
+ChromeExtension/defaults.js

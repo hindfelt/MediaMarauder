@@ -12,17 +12,24 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // Load the saved server URL on popup load
+    // Optional local defaults from defaults.js (gitignored, see defaults.example.js)
+    const defaults = (typeof MM_DEFAULTS !== 'undefined') ? MM_DEFAULTS : {};
+
+    // Load the saved server URL on popup load, falling back to local defaults
     chrome.storage.local.get(['serverUrl'], function (result) {
         if (result.serverUrl) {
             serverUrlInput.value = result.serverUrl;
+        } else if (defaults.serverUrl) {
+            serverUrlInput.value = defaults.serverUrl;
         }
     });
 
-    // Load the saved token on popup load
+    // Load the saved token on popup load, falling back to local defaults
     chrome.storage.local.get(['token'], function (result) {
         if (result.token) {
             tokenInput.value = result.token;
+        } else if (defaults.token) {
+            tokenInput.value = defaults.token;
         }
     });
 
