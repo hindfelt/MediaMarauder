@@ -1,0 +1,319 @@
+<mxfile host="draw.io" modified="2026-06-26T00:00:00.000Z" generator="qwen-code" version="25.0.0">
+  <diagram id="mediamarauder-architecture" name="Architecture">
+    <mxGraphModel dx="1424" dy="763" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- ===== Title ===== -->
+        <mxCell id="title" value="MediaMarauder – Application Architecture" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fillColor=#ffffff;strokeColor=none;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="480" y="20" width="440" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== CHROME EXTENSION (User) ===== -->
+        <mxCell id="ext-box" value="Chrome Extension" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="220" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext-popup" value="popup.html + popup.js" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1">
+          <mxGeometry x="80" y="135" width="180" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext-storage" value="chrome.storage.local" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="80" y="190" width="180" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="ext-details" value="(serverUrl, token, subtitle lang)" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;fillColor=none;strokeColor=none;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="85" y="225" width="180" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== USER BROWSER ===== -->
+        <mxCell id="browser-box" value="User Browser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="390" width="220" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser-tabs" value="Status Dashboard (status.html)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1">
+          <mxGeometry x="80" y="415" width="180" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser-poll" value="Polling: GET /status every 1s" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;fillColor=none;strokeColor=none;fontSize=10;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="80" y="460" width="210" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="browser-login" value="Google OAuth flow via /login" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;fillColor=none;strokeColor=none;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="80" y="490" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== REVERSE PROXY ===== -->
+        <mxCell id="proxy-box" value="Reverse Proxy (Caddy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6d6f0;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="95" width="200" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="proxy-ssl" value="TLS termination" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666" vertex="1" parent="1">
+          <mxGeometry x="360" y="125" width="160" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="proxy-cert" value="Let's Encrypt certs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="360" y="165" width="160" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="proxy-route" value="Routes → port 5000" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;fillColor=none;strokeColor=none;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="375" y="210" width="130" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== FLASK APP CONTAINER ===== -->
+        <mxCell id="flask-box" value="Flask Application (Flask 2.2.5)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff5cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="600" y="80" width="520" height="440" as="geometry"/>
+        </mxCell>
+
+        <!-- Routes sub-box -->
+        <mxCell id="routes-box" value="Routes (app.py)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366" vertex="1" parent="1">
+          <mxGeometry x="620" y="110" width="480" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="route-webhook" value="POST /webhook &lt;– API token auth" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="635" y="135" width="220" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="route-status" value="GET /status &lt;– OAuth (login_required)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="870" y="135" width="220" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="route-status-page" value="GET /status-page (HTML dashboard)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="635" y="175" width="220" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="route-login" value="GET /login → Google OAuth" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="870" y="175" width="220" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="route-pages" value="GET / (loader) + GET /landing" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="635" y="215" width="455" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- Security layer sub-box -->
+        <mxCell id="security-box" value="Security (securityUtils.py)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1">
+          <mxGeometry x="620" y="270" width="230" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="sec-validate" value="validate_url() : scheme, host, domain whitelist, injection chars" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="635" y="290" width="200" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="sec-sandbox" value="sanitize_filename() + ensure_safe_path()" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="635" y="325" width="200" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- Auth module sub-box -->
+        <mxCell id="auth-box" value="Auth (auth.py)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1">
+          <mxGeometry x="875" y="270" width="190" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="auth-oauth" value="Google OAuth 2.0 (Authlib)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="890" y="288" width="160" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="auth-login-req" value="@login_required decorator" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="890" y="320" width="160" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- Downloader sub-box -->
+        <mxCell id="downloader-box" value="Downloader (download.py)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6d6f0;strokeColor=#9673a6" vertex="1" parent="1">
+          <mxGeometry x="620" y="380" width="480" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="downloader-queue" value="url_queue (FIFO, thread-safe via Lock)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="635" y="400" width="210" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="downloader-process" value="process_queue() – daemon thread, polls every 5s" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="635" y="435" width="210" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="downloader-ytdlp" value="download_file() – yt-dlp subprocess" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="870" y="400" width="210" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="downloader-recording" value="Records progress, downloaded_files, status" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="870" y="435" width="210" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- Config sub-box -->
+        <mxCell id="config-box" value="config.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5dc;strokeColor=#999933;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="625" y="510" width="200" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="config-vars" value="API_TOKENS, WHITELIST, SECRET_KEY, OAuth keys, DOWNLOAD_PATH" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;fillColor=none;strokeColor=none;fontSize=9" vertex="1" parent="1">
+          <mxGeometry x="632" y="520" width="190" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== EXTERNAL SERVICES ===== -->
+        <!-- Google -->
+        <mxCell id="google-box" value="Google OAuth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1200" y="90" width="200" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="google-oauth" value="accounts.google.com" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1215" y="115" width="170" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="google-userinfo" value="User info, email validation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1215" y="150" width="170" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- yt-dlp / ffmpeg -->
+        <mxCell id="ytdlp-box" value="System Tools" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1200" y="410" width="200" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="ytdlp-bin" value="yt-dlp (binary)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1215" y="430" width="170" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="ffmpeg-bin" value="ffmpeg (video recoding)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="1215" y="465" width="170" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== STORAGE ===== -->
+        <mxCell id="storage-box" value="Storage (host volume)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="600" y="560" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="storage-path" value="DOWNLOAD_PATH" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="620" y="585" width="220" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="storage-contents" value="Videos (.mp4) + subtitles (.srt)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="620" y="620" width="220" height="26" as="geometry"/>
+        </mxCell>
+        <mxCell id="storage-mnt" value="Docker volume mount" style="text;html=1;align=left;resizable=0;points=[];autosize=1;fontSize=9;fontStyle=2" vertex="1" parent="1">
+          <mxGeometry x="635" y="650" width="120" height="15" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== DEPLOYMENT NOTE ===== -->
+        <mxCell id="deploy-note" value="Deployment: Docker → Caddy reverse proxy → Let's Encrypt TLS  CI/CD: GitHub Actions (push main → multi-arch Docker Hub image: amd64 + arm64)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5dc;strokeColor=#999933;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="920" y="560" width="480" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== CONNECTIONS ===== -->
+        <!-- Chrome Extension → Reverse Proxy (HTTPS webhook) -->
+        <mxCell id="conn-ext-proxy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#333333;" edge="1" parent="1" source="ext-box" target="proxy-box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="140"/>
+              <mxPoint x="280" y="140"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-ext-proxy-label" value="POST /webhook{url, subtitle_lang, Auth: token}" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-ext-proxy">
+          <mxGeometry x="-0.15" y="2" relative="1" as="geometry">
+            <mxPoint x="20" y="-10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Browser → Reverse Proxy (HTTPS status) -->
+        <mxCell id="conn-browser-proxy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#333333;" edge="1" parent="1" source="browser-box" target="proxy-box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="310" y="420"/>
+              <mxPoint x="310" y="200"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-browser-proxy-label" value="GET /status (poll 1s), /status-page, /login" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-browser-proxy">
+          <mxGeometry x="-0.15" y="2" relative="1" as="geometry">
+            <mxPoint x="20" y="-10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Reverse Proxy → Flask App -->
+        <mxCell id="conn-proxy-flask" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#333333;" edge="1" parent="1" source="proxy-box" target="routes-box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-proxy-flask-label" value="HTTP :5000" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-proxy-flask">
+          <mxGeometry x="0.5" relative="1" as="geometry">
+            <mxPoint x="5" y="-10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Routes → Security (webhook validation) -->
+        <mxCell id="conn-route-sec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#666666;dashPattern=1 3" edge="1" parent="1" source="route-webhook" target="sec-validate">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-route-sec-label" value="validate_url()" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-route-sec">
+          <mxGeometry x="0.5" relative="1" as="geometry">
+            <mxPoint x="-8" y="-5" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Routes → Auth (status page protection) -->
+        <mxCell id="conn-route-auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#666666;dashPattern=1 3" edge="1" parent="1" source="route-status" target="auth-oauth">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-route-auth-label" value="@login_required" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-route-auth">
+          <mxGeometry x="0.5" relative="1" as="geometry">
+            <mxPoint x="5" y="-5" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Routes → Downloader (add_to_queue) -->
+        <mxCell id="conn-route-downloader" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#666666;dashPattern=1 3" edge="1" parent="1" source="route-webhook" target="downloader-queue">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Routes → Downloader (status getters) -->
+        <mxCell id="conn-route-status-getter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#666666;dashPattern=1 3" edge="1" parent="1" source="route-status" target="downloader-process">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1050" y="370"/>
+              <mxPoint x="770" y="370"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Downloader progress → Routes status -->
+        <mxCell id="conn-progress-up" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=block;endArrow=none;strokeColor=#999999;dashPattern=1 3;labelBackgroundColor=#ffffff;fontSize=9" edge="1" parent="1" source="downloader-recording" target="route-status">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-progress-up-label" value="progress (0–100%)" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-progress-up">
+          <mxGeometry y="7" relative="1" as="geometry">
+            <mxPoint x="-20" y="-15" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Downloader → yt-dlp / ffmpeg -->
+        <mxCell id="conn-downloader-ytdlp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#333333;" edge="1" parent="1" source="downloader-ytdlp" target="ytdlp-bin">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-downloader-ytdlp-label" value="subprocess" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-downloader-ytdlp">
+          <mxGeometry x="0.5" relative="1" as="geometry">
+            <mxPoint x="5" y="-10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Downloader → Storage -->
+        <mxCell id="conn-downloader-storage" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#333333;" edge="1" parent="1" source="downloader-process" target="storage-path">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-downloader-storage-label" value="saved files" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-downloader-storage">
+          <mxGeometry x="0.5" relative="1" as="geometry">
+            <mxPoint x="5" y="-10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Auth ↔ Google -->
+        <mxCell id="conn-auth-google" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=1;strokeColor=#6C8EBF;" edge="1" parent="1" source="auth-oauth" target="google-oauth">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="160"/>
+              <mxPoint x="1100" y="145"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-auth-google-label" value="OAuth 2.0, email check" style="text;html=1;resizable=0;points=[];align=center;verticalAlign=middle;labelBackgroundColor=#ffffff;fontSize=9" vertex="1" connectable="0" parent="conn-auth-google">
+          <mxGeometry x="0.5" relative="1" as="geometry">
+            <mxPoint x="5" y="-10" as="offset"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Config → all modules (dashed) -->
+        <mxCell id="conn-config-routes" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=0;strokeColor=#999933;dashPattern=1 3" edge="1" parent="1" source="config-box" target="routes-box">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="conn-config-auth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=0;strokeColor=#999933;dashPattern=1 3" edge="1" parent="1" source="config-box" target="auth-box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="500"/>
+              <mxPoint x="970" y="500"/>
+              <mxPoint x="970" y="360"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-config-sec" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=0;strokeColor=#999933;dashPattern=1 3" edge="1" parent="1" source="config-box" target="security-box">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="520"/>
+              <mxPoint x="720" y="460"/>
+              <mxPoint x="745" y="460"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="conn-config-downloader" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;startArrow=none;endArrow=block;endFill=0;strokeColor=#999933;dashPattern=1 3" edge="1" parent="1" source="config-box" target="downloader-process">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

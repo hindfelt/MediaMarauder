@@ -126,6 +126,14 @@ docker run -d --name mediamarauder --restart unless-stopped \
 
 ## Changelog
 
+### 2026-06-26
+**Code Cleanup & Configuration Improvements**
+- **Fixed:** Flask `secret_key` now persistent via `SECRET_KEY` in `config.py` (sessions survive container restarts)
+- **Fixed:** `config_example.py` now includes all config fields (OAuth, `SECRET_KEY`)
+- **Fixed:** Removed hardcoded `/app/downloads` path in `download.py`
+- **Removed:** Dead code -- `validateurl()` in `app.py`, `SecurityUtils.download_file()`, `/process-queue` endpoint, incomplete `save_file_in_series_folder()`
+- **Added:** Architecture documentation in `docs/architecture.md`
+
 ### 2026-01-05
 **Critical Bug Fix: Download Blocking Issue**
 - **Fixed:** Downloads stopping mid-process due to subprocess stderr buffer blocking

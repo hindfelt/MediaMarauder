@@ -1,0 +1,11 @@
+config.py
+.git
+__pycache__
+downloads
+venv
+.venv
+.env
+node_modules
+*.pem
+*.key
+*.crt

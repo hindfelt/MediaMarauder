@@ -2,13 +2,18 @@ from functools import wraps
 from flask import session, jsonify, redirect, url_for
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.base_client.errors import OAuthError
-import os
-from config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ALLOWED_EMAIL  # Import from config 
+from config import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, ALLOWED_EMAIL, SECRET_KEY
+
 
 def init_auth(app):
 
-    app.secret_key = os.urandom(24)
-    
+    app.secret_key = SECRET_KEY
+    app.config.update(
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE='Lax',
+    )
+
     oauth = OAuth(app)
     google = oauth.register(
         name='google',
@@ -16,8 +21,8 @@ def init_auth(app):
         client_secret=GOOGLE_CLIENT_SECRET,
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
         client_kwargs={'scope': 'openid email profile'}
-    )
-    
+     )
+
     def login_required(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -25,24 +30,23 @@ def init_auth(app):
                 return jsonify({"error": "Unauthorized"}), 401
             return f(*args, **kwargs)
         return decorated_function
-    
+
     @app.route('/auth')
     def auth():
         try:
             token = google.authorize_access_token()
             userinfo = token.get('userinfo')
             if userinfo:
-                allowed_email = ALLOWED_EMAIL
-                if allowed_email and userinfo['email'] != allowed_email:
+                allowed_email = (ALLOWED_EMAIL or '').strip()
+                user_email = (userinfo.get('email') or '').strip()
+                if not allowed_email or user_email.lower() != allowed_email.lower():
                     return 'Unauthorized email', 401
                 session['user'] = userinfo
                 return redirect('/status-page')
         except OAuthError as e:
-            # Handle OAuth errors (like access denied)
             print(f"OAuth error: {str(e)}")
-            return redirect('/login')  # Redirect back to login
+            return redirect('/login')
         except Exception as e:
-            # Handle other errors
             print(f"Authentication error: {str(e)}")
             return 'Authentication failed', 400
 
@@ -57,6 +61,5 @@ def init_auth(app):
     def logout():
         session.pop('user', None)
         return redirect('/')
-        
-    return login_required
 
+    return login_required

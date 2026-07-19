@@ -6,9 +6,7 @@
     "description": "Sends current tab URL to a webhook",
     "permissions": [
         "activeTab",
-        "storage",
-        "scripting",
-        "tabs"
+        "storage"
     ],
     "host_permissions": [
         "http://*/*",
