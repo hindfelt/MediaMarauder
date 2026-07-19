@@ -57,28 +57,45 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Save the entered server URL when clicking the "Save Server URL" button
+    // Save the entered server URL when clicking the "Save Server URL" button.
+    // Also requests host permission for that origin (required for the fetch,
+    // since the extension uses optional_host_permissions).
     saveServerUrlButton.addEventListener('click', function () {
         const serverUrl = serverUrlInput.value.trim();
-        if (serverUrl) {
+        if (!serverUrl) {
+            statusDiv.textContent = 'Please enter a valid server URL.';
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'error';
+            setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+            return;
+        }
+
+        let originPattern;
+        try {
+            originPattern = new URL(serverUrl).origin + '/*';
+        } catch (e) {
+            statusDiv.textContent = 'Invalid URL. Include the scheme, e.g. https://your.domain/path';
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'error';
+            setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
+            return;
+        }
+
+        chrome.permissions.request({ origins: [originPattern] }, function (granted) {
+            if (!granted) {
+                statusDiv.textContent = 'Permission for ' + originPattern + ' was denied. The extension cannot reach your server without it.';
+                statusDiv.style.display = 'block';
+                statusDiv.className = 'error';
+                setTimeout(() => { statusDiv.style.display = 'none'; }, 5000);
+                return;
+            }
             chrome.storage.local.set({ serverUrl: serverUrl }, function () {
                 statusDiv.textContent = 'Server URL saved successfully!';
                 statusDiv.style.display = 'block';
                 statusDiv.className = 'success';
-
-                setTimeout(() => {
-                    statusDiv.style.display = 'none';
-                }, 3000);
+                setTimeout(() => { statusDiv.style.display = 'none'; }, 3000);
             });
-        } else {
-            statusDiv.textContent = 'Please enter a valid server URL.';
-            statusDiv.style.display = 'block';
-            statusDiv.className = 'error';
-
-            setTimeout(() => {
-                statusDiv.style.display = 'none';
-            }, 3000);
-        }
+        });
     });
 
     // Add click handlers to all language buttons
@@ -110,6 +127,22 @@ document.addEventListener('DOMContentLoaded', function () {
                         const tokenIn = result.token;
                         if (!tokenIn) {
                             statusDiv.textContent = 'Please save the server token first.';
+                            statusDiv.style.display = 'block';
+                            statusDiv.className = 'error';
+                            return;
+                        }
+                        let originPattern;
+                        try {
+                            originPattern = new URL(serverUrl).origin + '/*';
+                        } catch (e) {
+                            statusDiv.textContent = 'Saved server URL is invalid. Please re-save it.';
+                            statusDiv.style.display = 'block';
+                            statusDiv.className = 'error';
+                            return;
+                        }
+                        chrome.permissions.contains({ origins: [originPattern] }, function (hasPermission) {
+                        if (!hasPermission) {
+                            statusDiv.textContent = 'Missing permission for your server. Click "Save Server URL" again to grant it.';
                             statusDiv.style.display = 'block';
                             statusDiv.className = 'error';
                             return;
@@ -157,6 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     statusDiv.style.display = 'none';
                                 }, 3000);
                             });
+                        });
                     });
                 });
             });

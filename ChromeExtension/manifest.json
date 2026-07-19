@@ -1,14 +1,13 @@
-
 {
     "name": "URL to Webhook",
-    "version": "1.0",
+    "version": "1.1",
     "manifest_version": 3,
-    "description": "Sends current tab URL to a webhook",
+    "description": "Sends current tab URL to your self-hosted MediaMarauder download server",
     "permissions": [
         "activeTab",
         "storage"
     ],
-    "host_permissions": [
+    "optional_host_permissions": [
         "http://*/*",
         "https://*/*"
     ],
