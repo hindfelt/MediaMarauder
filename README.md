@@ -15,6 +15,42 @@ A Dockerized video downloader system for offline viewing that processes URLs sub
 ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
 ```
 
+## Architecture
+
+```mermaid
+flowchart LR
+    subgraph client["Client"]
+        EXT["Chrome extension<br/>(popup)"]
+        BROWSER["Browser<br/>(status page)"]
+    end
+
+    subgraph edge["Edge (optional)"]
+        CF["Cloudflare<br/>DNS + proxy"]
+    end
+
+    subgraph server["Server"]
+        CADDY["Caddy<br/>TLS termination"]
+        subgraph docker["Docker: mediamarauder"]
+            FLASK["Flask app<br/>webhook + status + OAuth"]
+            QUEUE["Download queue<br/>(daemon thread)"]
+            YTDLP["yt-dlp + ffmpeg<br/>(subprocess)"]
+        end
+        STORE[("Download storage<br/>volume / NAS share")]
+    end
+
+    GOOGLE["Google OAuth"]
+    PLATFORMS["Video platforms<br/>YouTube, SVT Play, ..."]
+
+    EXT -- "POST url + API token" --> CF
+    BROWSER -- "HTTPS + session cookie" --> CF
+    CF --> CADDY --> FLASK
+    FLASK -- "validate URL,<br/>enqueue" --> QUEUE
+    QUEUE --> YTDLP
+    YTDLP -- "fetch stream" --> PLATFORMS
+    YTDLP -- "mp4 + srt" --> STORE
+    FLASK <-. "login flow" .-> GOOGLE
+```
+
 ## Features
 - Secure Google OAuth authentication
 - Download queue management

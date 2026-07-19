@@ -12,43 +12,82 @@ MediaMarauder is a Dockerized video downloader service. It accepts video URLs su
 
 ## 2. System Architecture
 
+```mermaid
+flowchart TB
+    subgraph client["Client side"]
+        EXT["Chrome extension popup<br/>saves server URL + API token"]
+        BROWSER["Browser<br/>status dashboard"]
+    end
+
+    CF["Cloudflare<br/>DNS + proxied edge (optional)"]
+
+    subgraph pve["Proxmox VE host"]
+        subgraph lxc101["LXC: caddy-proxy"]
+            CADDY["Caddy<br/>TLS termination, reverse proxy"]
+        end
+        subgraph lxc102["LXC: webapps-docker"]
+            subgraph dockerc["Docker container: mediamarauder"]
+                FLASK["Flask (app.py)<br/>webhook / status / OAuth routes"]
+                SEC["SecurityUtils<br/>URL + domain validation"]
+                DL["Downloader (download.py)<br/>thread-safe queue + daemon worker"]
+                YT["yt-dlp + ffmpeg subprocess<br/>progress parsed from stdout"]
+            end
+        end
+        subgraph vm100["VM: OpenMediaVault NAS"]
+            SMB[("SMB share<br/>mp4 + srt files")]
+        end
+    end
+
+    GOOGLE["Google OAuth 2.0"]
+    PLATFORMS["Video platforms<br/>(whitelisted domains)"]
+
+    EXT -- "POST {url, subtitle_lang}<br/>Auth: API token" --> CF
+    BROWSER -- "HTTPS, session cookie" --> CF
+    CF --> CADDY
+    CADDY -- "HTTP (LAN)" --> FLASK
+    FLASK --> SEC
+    SEC -- "valid" --> DL
+    DL --> YT
+    YT -- "stream download" --> PLATFORMS
+    YT -- "write files" --> SMB
+    FLASK <-. "login redirect + callback" .-> GOOGLE
+
+    SMB -.- MOUNT["host CIFS mount -> LXC bind mount -> docker volume"]
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                        Reverse Proxy                          │
-│                     (Caddy + Let's Encrypt)                    │
-│                     Handles TLS termination                    │
-└────────────────────────┬─────────────────────────────────────┘
-                          │
-                          ▼
-┌──────────────────────────────────────────────────────────────┐
-│                   MediaMarauder (Flask)                        │
-│                                                               │
-│   ┌──────────────┐    ┌──────────────┐    ┌───────────────┐ │
-│   │   Webhook     │    │  Status API   │    │   HTML Pages   │ │
-│   │   (POST)       │    │  (GET/POST)   │    │   (GET)        │ │
-│   │  API Token    │    │  OAuth        │    │  Loader/Auth   │ │
-│   └──────┬───────┘    └──────┬───────┘    └───────────────┘ │
-│          │                    │                                 │
-│          ▼                    ▼                                 │
-│   ┌──────────────────────────────────────┐                   │
-│   │          Downloader (download.py)      │                   │
-│   │   ┌────────────┐   ┌────────────────┐   │                   │
-│   │   │  URL Queue │──│  Process Queue │   │                   │
-│   │   │  (thread-   │   │  (daemon       │   │                   │
-│   │   │  safe)     │   │  thread)       │   │                   │
-│   │   └────────────┘   └──────┬─────────┘   │                   │
-│   │                           │              │                   │
-│   │                   ┌───────▼────────┐    │                   │
-│   │                   │   yt-dlp via    │    │                   │
-│   │                   │   subprocess    │    │                   │
-│   │                   └───────┬────────┘    │                   │
-│   └─────────────────────────┼────────────┘                   │
-│                              │                                 │
-│                    ┌─────────▼──────────┐                    │
-│                    │   DOWNLOAD_PATH     │                    │
-│                    │    (host volume)    │                    │
-│                    └────────────────────┘                    │
-└──────────────────────────────────────────────────────────────┘
+
+### Download sequence
+
+```mermaid
+sequenceDiagram
+    participant E as Chrome extension
+    participant F as Flask webhook
+    participant Q as Queue (daemon thread)
+    participant Y as yt-dlp subprocess
+    participant S as Storage (NAS volume)
+
+    E->>F: POST {url, subtitle_lang} + Auth token
+    F->>F: constant-time token check
+    F->>F: validate_url (scheme, whitelist, chars)
+    F->>Q: add_to_queue((url, lang))
+    F-->>E: 200 "URL added to the queue"
+    loop every 5s when idle
+        Q->>Q: poll queue
+    end
+    Q->>Y: Popen yt-dlp (stderr->stdout)
+    Y->>Y: download + recode mp4 (+ subs srt)
+    Y-->>Q: progress % (parsed per line)
+    Q-->>F: current_download_percentage
+    Y->>S: write final files
+    Q->>Q: mark done, reset progress
+```
+
+### CI/CD
+
+```mermaid
+flowchart LR
+    DEV["git push main"] --> GH["GitHub Actions"]
+    GH -- "buildx amd64+arm64" --> HUB["Docker Hub<br/>mathin/mediamarauder:latest"]
+    HUB -- "docker pull + recreate" --> PROD["Docker host"]
 ```
 
 ---
