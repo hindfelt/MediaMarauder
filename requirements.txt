@@ -2,6 +2,6 @@ flask>=3.1
 yt-dlp
 werkzeug>=3.1.4
 urllib3>=2.6.0
-Authlib==1.6.6
+Authlib==1.6.12
 requests
 python-dotenv==0.19.0
