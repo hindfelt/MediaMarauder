@@ -103,7 +103,7 @@ flowchart LR
 | Route | Method | Auth | Description |
 |---|---|---|---|
 | `/` | GET | None | Loader page (Vite React app, auto-redirects to `/landing` after 3s) |
-| `/landing` | GET | None | Landing page with "move on" animation and login link |
+| `/landing` | GET | None | Public portfolio with selected projects, a live Space demo, and a private-tools login link |
 | `/login` | GET | None | Initiates Google OAuth consent flow (defined in `auth.py`) |
 | `/auth` | GET | None | OAuth callback: validates email, stores user in session (defined in `auth.py`) |
 | `/logout` | GET | None | Clears session, redirects to `/` (defined in `auth.py`) |
@@ -213,11 +213,12 @@ A Vite-bundled React 19.2.3 app served at `/`. Features:
 
 ### 4.2 Landing Page (`templates/index2.html`)
 
-Served at `/landing`. Shows:
-- "Nothing here to see..." message
-- Animated `move_on.webp`
-- GitHub project link
-- `/login` link for status page access
+Served at `/landing`. The dependency-free portfolio page includes:
+- A dark editorial introduction and responsive selected-work grid
+- An embedded interactive sculpture from `space.0x4d.in`
+- Links to the public GitHub repositories featured on the page
+- `/login` retained as a discreet private-tools link
+- Open Graph and X metadata using `static/og-portfolio.png`
 
 ### 4.3 Status Dashboard (`templates/status.html`)
 
