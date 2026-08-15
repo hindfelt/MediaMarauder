@@ -207,38 +207,98 @@
         h1 {
             max-width: 940px;
             margin: 0;
-            font-size: clamp(60px, 9.6vw, 150px);
+            font-size: clamp(66px, 9.4vw, 146px);
             font-weight: 760;
             letter-spacing: -.075em;
-            line-height: .82;
+            line-height: .84;
             text-wrap: balance;
         }
 
-        h1 .line {
+        .hero-term-line {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 14px 24px;
+        }
+
+        .hero-pronunciation {
+            color: var(--muted);
+            font: 500 clamp(13px, 1.2vw, 17px)/1 var(--mono);
+            letter-spacing: .04em;
+        }
+
+        .hero-word-type {
+            margin: 12px 0 0;
+            color: var(--quiet);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 15px;
+            font-style: italic;
+        }
+
+        .hero-definitions {
+            display: grid;
+            gap: 24px;
+            max-width: 760px;
+            margin: 34px 0 0;
+            padding: 26px 0 0;
+            border-top: 1px solid var(--line-strong);
+            list-style: none;
+            counter-reset: hero-definition;
+        }
+
+        .hero-definitions li {
+            display: grid;
+            grid-template-columns: 26px minmax(0, 1fr);
+            gap: 14px;
+            counter-increment: hero-definition;
+        }
+
+        .hero-definitions li::before {
+            padding-top: 3px;
+            color: var(--paper);
+            content: counter(hero-definition) ".";
+            font: 650 11px/1.5 var(--mono);
+        }
+
+        .hero-origin {
+            margin: 0;
+            color: var(--muted);
+            font-size: clamp(14px, 1.25vw, 17px);
+            line-height: 1.65;
+        }
+
+        .hero-origin code {
+            color: var(--paper);
+            font: 600 .92em/1 var(--mono);
+        }
+
+        .hero-origin em {
+            color: var(--paper);
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        .hero-definition-title {
+            display: block;
+            margin: 0;
+            color: var(--paper);
+            font-size: clamp(37px, 4.7vw, 70px);
+            font-weight: 690;
+            letter-spacing: -.06em;
+            line-height: .93;
+        }
+
+        .hero-definition-title span {
             display: block;
         }
 
-        h1 .line:last-child {
-            position: relative;
+        .hero-definition-title span:last-child {
             color: transparent;
-            -webkit-text-stroke: 1.5px var(--paper);
-        }
-
-        h1 .line:last-child::after {
-            position: absolute;
-            top: .08em;
-            right: -.04em;
-            width: .14em;
-            height: .14em;
-            border-radius: 50%;
-            background: var(--red);
-            box-shadow: 0 0 30px rgba(255, 59, 48, .52);
-            content: "";
+            -webkit-text-stroke: 1px var(--paper);
         }
 
         .hero-copy {
             max-width: 610px;
-            margin: 38px 0 0;
+            margin: 20px 0 0;
             color: var(--muted);
             font-size: clamp(16px, 1.6vw, 21px);
             line-height: 1.6;
@@ -824,80 +884,6 @@
             color: var(--muted);
         }
 
-        .about-definition {
-            display: grid;
-            grid-template-columns: minmax(180px, .42fr) minmax(0, 1fr);
-            gap: clamp(28px, 5vw, 72px);
-            margin-top: 64px;
-            max-width: 840px;
-            padding-top: 28px;
-            border-top: 1px solid var(--line-strong);
-            color: var(--quiet);
-            font-size: 14px;
-            line-height: 1.65;
-        }
-
-        .definition-head {
-            display: flex;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 8px 14px;
-        }
-
-        .definition-term {
-            color: var(--paper);
-            font-size: clamp(28px, 3.2vw, 46px);
-            font-weight: 720;
-            letter-spacing: -.06em;
-            line-height: 1;
-        }
-
-        .definition-pronunciation {
-            color: var(--muted);
-            font: 500 13px/1 var(--mono);
-            letter-spacing: .04em;
-        }
-
-        .definition-type {
-            flex-basis: 100%;
-            color: var(--quiet);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 14px;
-            font-style: italic;
-        }
-
-        .definition-list {
-            display: grid;
-            gap: 18px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            counter-reset: definition;
-        }
-
-        .definition-list li {
-            display: grid;
-            grid-template-columns: 24px minmax(0, 1fr);
-            gap: 12px;
-            counter-increment: definition;
-        }
-
-        .definition-list li::before {
-            color: var(--paper);
-            content: counter(definition) ".";
-            font: 600 11px/1.65 var(--mono);
-        }
-
-        .definition-list code {
-            color: var(--paper);
-            font: 600 .92em/1 var(--mono);
-        }
-
-        .definition-list em {
-            color: var(--muted);
-            font-family: Georgia, "Times New Roman", serif;
-        }
-
         .footer {
             display: flex;
             align-items: end;
@@ -1011,10 +997,6 @@
 
             .section-heading,
             .about {
-                grid-template-columns: 1fr;
-            }
-
-            .about-definition {
                 grid-template-columns: 1fr;
             }
 
@@ -1146,11 +1128,20 @@
         <section class="shell hero" aria-labelledby="hero-title">
             <div class="hero-main reveal">
                 <p class="eyebrow">Mattias Hindfelt / Stockholm / 2026</p>
-                <h1 id="hero-title">
-                    <span class="line">Odd ideas.</span>
-                    <span class="line">Useful software.</span>
-                </h1>
-                <p class="hero-copy">Independent experiments in <strong>interactive worlds, creative tools, and practical automation</strong>—built to answer questions that would otherwise keep nagging.</p>
+                <div class="hero-term-line">
+                    <h1 id="hero-title">0x4d.in</h1>
+                    <span class="hero-pronunciation">/miːn/</span>
+                </div>
+                <p class="hero-word-type">proper noun</p>
+                <ol class="hero-definitions" aria-label="Definition of 0x4d.in">
+                    <li><p class="hero-origin"><code>0x4d</code> is hexadecimal for M; together with <code>.in</code>, it reads <em>min</em>—Swedish for “mine.”</p></li>
+                    <li>
+                        <div>
+                            <strong class="hero-definition-title"><span>Odd ideas.</span><span>Useful software.</span></strong>
+                            <p class="hero-copy">Independent experiments in <strong>interactive worlds, creative tools, and practical automation</strong>—built to answer questions that would otherwise keep nagging.</p>
+                        </div>
+                    </li>
+                </ol>
                 <div class="hero-actions">
                     <a class="button primary" href="#work">Explore the work</a>
                     <a class="button" href="https://github.com/hindfelt" target="_blank" rel="noopener noreferrer">Open GitHub</a>
@@ -1269,17 +1260,6 @@
             <p class="section-kicker reveal"><span>02</span> The thread</p>
             <div class="about-copy reveal">
                 <p id="about-title">I like software that makes an idea <span>touchable.</span> Sometimes useful. Sometimes strange. Preferably both.</p>
-                <div class="about-definition" aria-label="Definition of 0x4d.in">
-                    <div class="definition-head">
-                        <strong class="definition-term">0x4d.in</strong>
-                        <span class="definition-pronunciation">/miːn/</span>
-                        <span class="definition-type">proper noun</span>
-                    </div>
-                    <ol class="definition-list">
-                        <li><span><code>0x4d</code> is hexadecimal for M; together with <code>.in</code>, it reads <em>min</em>—Swedish for “mine.”</span></li>
-                        <li><span>Creative software experiments, built to test what is possible before worrying about what category they belong to.</span></li>
-                    </ol>
-                </div>
             </div>
         </section>
     </main>
