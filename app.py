@@ -1,3 +1,4 @@
+import mimetypes
 import re
 import secrets
 
@@ -10,6 +11,8 @@ from config import API_TOKENS
 from config import WEBHOOK_PATH
 from config import STATUS_PATH
 
+
+mimetypes.add_type("image/webp", ".webp")
 
 app = Flask(__name__)
 downloader = Downloader()
@@ -24,6 +27,11 @@ def home():
 @app.route('/landing')
 def landing():
     return render_template('index2.html')
+
+
+@app.route('/work/zieapp')
+def zieapp_case_study():
+    return render_template('zieapp.html')
 
 
 @app.route(WEBHOOK_PATH, methods=['POST'])

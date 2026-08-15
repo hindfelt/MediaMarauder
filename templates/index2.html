@@ -585,6 +585,104 @@
             background: var(--surface);
         }
 
+        .project-zieapp {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr);
+            min-height: 650px;
+            background:
+                radial-gradient(circle at 25% 28%, rgba(59, 130, 246, .22), transparent 34%),
+                #071329;
+        }
+
+        .project-zieapp:hover {
+            background:
+                radial-gradient(circle at 25% 28%, rgba(59, 130, 246, .3), transparent 36%),
+                #091936;
+        }
+
+        .project-zieapp .project-visual {
+            min-height: 650px;
+            border-right: 1px solid rgba(255, 255, 255, .14);
+            border-bottom: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px),
+                linear-gradient(145deg, #082253, #020919 76%);
+            background-size: 52px 52px, 52px 52px, auto;
+        }
+
+        .project-zieapp .project-visual::before {
+            position: absolute;
+            width: 55%;
+            aspect-ratio: 1;
+            border: 1px solid rgba(96, 165, 250, .24);
+            border-radius: 50%;
+            box-shadow: 0 0 0 72px rgba(96, 165, 250, .04), 0 0 0 144px rgba(96, 165, 250, .025);
+            content: "";
+        }
+
+        .zie-phone {
+            position: absolute !important;
+            inset: auto !important;
+            z-index: 1;
+            width: min(32%, 245px) !important;
+            height: auto !important;
+            aspect-ratio: 780 / 1688;
+            border: 7px solid #09101e;
+            border-radius: 30px;
+            object-fit: cover;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .18);
+            transition: transform .65s cubic-bezier(.2,.8,.2,1), filter .45s ease !important;
+        }
+
+        .zie-phone-signal {
+            top: 11%;
+            left: 17%;
+            transform: rotate(-5deg);
+        }
+
+        .zie-phone-contribute {
+            right: 16%;
+            bottom: -10%;
+            transform: rotate(6deg);
+        }
+
+        .project-zieapp:hover .zie-phone-signal {
+            transform: rotate(-3deg) translateY(-8px);
+        }
+
+        .project-zieapp:hover .zie-phone-contribute {
+            transform: rotate(4deg) translateY(-10px);
+        }
+
+        .project-zieapp .project-content {
+            position: relative;
+            justify-content: center;
+            background: linear-gradient(155deg, rgba(255, 255, 255, .035), transparent 60%);
+        }
+
+        .project-zieapp .project-content::before {
+            display: block;
+            width: 42px;
+            height: 5px;
+            margin-bottom: 34px;
+            border-radius: 999px;
+            background: #60a5fa;
+            box-shadow: 0 0 24px rgba(96, 165, 250, .65);
+            content: "";
+        }
+
+        .project-zieapp h3 {
+            font-size: clamp(50px, 6.5vw, 92px);
+        }
+
+        .project-zieapp .project-description {
+            max-width: 40ch;
+            color: rgba(255, 255, 255, .68);
+            font-size: 16px;
+        }
+
         .project-visual {
             position: relative;
             display: grid;
@@ -861,6 +959,32 @@
                 min-height: 540px;
             }
 
+            .project-zieapp {
+                grid-template-columns: 1fr;
+            }
+
+            .project-zieapp .project-visual {
+                min-height: 520px;
+                border-right: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, .14);
+            }
+
+            .project-zieapp .project-content {
+                min-height: 500px;
+            }
+
+            .zie-phone {
+                width: min(42%, 230px) !important;
+            }
+
+            .zie-phone-signal {
+                left: 12%;
+            }
+
+            .zie-phone-contribute {
+                right: 10%;
+            }
+
             .footer {
                 align-items: start;
                 flex-direction: column;
@@ -1006,6 +1130,20 @@
             </article>
 
             <div class="projects-grid">
+                <a class="project project-zieapp reveal" href="/work/zieapp" aria-labelledby="zieapp-title">
+                    <div class="project-visual" aria-hidden="true">
+                        <img class="zie-phone zie-phone-signal" src="/static/portfolio/zieapp/zieapp-signal.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+                        <img class="zie-phone zie-phone-contribute" src="/static/portfolio/zieapp/zieapp-contribute.webp" alt="" width="780" height="1688" loading="lazy" decoding="async">
+                        <div class="visual-caption"><span>Live product</span><span>Telegram + Web</span></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-meta"><span>Private source / Live</span><span>React + Cloudflare</span></div>
+                        <h3 id="zieapp-title">ZieApp</h3>
+                        <p class="project-description">A focused operating system for an advisory network: editorial signal, targeted events, expertise requests, contribution funnels, and SIE reporting in one product.</p>
+                        <div class="project-foot"><span>Read product case study</span><span class="arrow">→</span></div>
+                    </div>
+                </a>
+
                 <a class="project reveal" href="https://github.com/hindfelt/drained-seabed-explorer" target="_blank" rel="noopener noreferrer" aria-labelledby="seabed-title">
                     <div class="project-visual visual-seabed">
                         <img src="/static/portfolio/drained-seabed.webp" alt="Drained 3D terrain of the Öresund with labeled shipwrecks" width="640" height="353" loading="lazy" decoding="async">
