@@ -824,15 +824,78 @@
             color: var(--muted);
         }
 
-        .about-small {
+        .about-definition {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 30px;
-            margin-top: 54px;
-            max-width: 720px;
+            grid-template-columns: minmax(180px, .42fr) minmax(0, 1fr);
+            gap: clamp(28px, 5vw, 72px);
+            margin-top: 64px;
+            max-width: 840px;
+            padding-top: 28px;
+            border-top: 1px solid var(--line-strong);
             color: var(--quiet);
             font-size: 14px;
             line-height: 1.65;
+        }
+
+        .definition-head {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 8px 14px;
+        }
+
+        .definition-term {
+            color: var(--paper);
+            font-size: clamp(28px, 3.2vw, 46px);
+            font-weight: 720;
+            letter-spacing: -.06em;
+            line-height: 1;
+        }
+
+        .definition-pronunciation {
+            color: var(--muted);
+            font: 500 13px/1 var(--mono);
+            letter-spacing: .04em;
+        }
+
+        .definition-type {
+            flex-basis: 100%;
+            color: var(--quiet);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .definition-list {
+            display: grid;
+            gap: 18px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            counter-reset: definition;
+        }
+
+        .definition-list li {
+            display: grid;
+            grid-template-columns: 24px minmax(0, 1fr);
+            gap: 12px;
+            counter-increment: definition;
+        }
+
+        .definition-list li::before {
+            color: var(--paper);
+            content: counter(definition) ".";
+            font: 600 11px/1.65 var(--mono);
+        }
+
+        .definition-list code {
+            color: var(--paper);
+            font: 600 .92em/1 var(--mono);
+        }
+
+        .definition-list em {
+            color: var(--muted);
+            font-family: Georgia, "Times New Roman", serif;
         }
 
         .footer {
@@ -948,6 +1011,10 @@
 
             .section-heading,
             .about {
+                grid-template-columns: 1fr;
+            }
+
+            .about-definition {
                 grid-template-columns: 1fr;
             }
 
@@ -1202,9 +1269,16 @@
             <p class="section-kicker reveal"><span>02</span> The thread</p>
             <div class="about-copy reveal">
                 <p id="about-title">I like software that makes an idea <span>touchable.</span> Sometimes useful. Sometimes strange. Preferably both.</p>
-                <div class="about-small">
-                    <p>0x4d is hexadecimal for the letter M. It is also a convenient umbrella for experiments that do not belong in a single category.</p>
-                    <p>Everything here is designed, built, and shipped by Mattias Hindfelt—often with AI collaborators, always with a bias toward working software.</p>
+                <div class="about-definition" aria-label="Definition of 0x4d.in">
+                    <div class="definition-head">
+                        <strong class="definition-term">0x4d.in</strong>
+                        <span class="definition-pronunciation">/miːn/</span>
+                        <span class="definition-type">proper noun</span>
+                    </div>
+                    <ol class="definition-list">
+                        <li><span><code>0x4d</code> is hexadecimal for M; together with <code>.in</code>, it reads <em>min</em>—Swedish for “mine.”</span></li>
+                        <li><span>Creative software experiments, built to test what is possible before worrying about what category they belong to.</span></li>
+                    </ol>
                 </div>
             </div>
         </section>
