@@ -588,10 +588,72 @@
         .project-visual {
             position: relative;
             display: grid;
-            min-height: 310px;
+            min-height: 340px;
             overflow: hidden;
             place-items: center;
             border-bottom: 1px solid var(--line);
+            background: #0b0b0b;
+            isolation: isolate;
+        }
+
+        .project-visual::after {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+                linear-gradient(to top, rgba(8, 8, 8, .72), transparent 42%),
+                linear-gradient(135deg, rgba(8, 8, 8, .08), transparent 55%);
+            content: "";
+            pointer-events: none;
+        }
+
+        .project-visual img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter .45s ease, transform .65s cubic-bezier(.2,.8,.2,1);
+        }
+
+        .project:hover .project-visual img {
+            filter: saturate(1.08) contrast(1.03);
+            transform: scale(1.025);
+        }
+
+        .visual-seabed img {
+            object-position: 50% 52%;
+        }
+
+        .visual-golf img {
+            object-position: 50% 50%;
+        }
+
+        .visual-teams img,
+        .visual-marauder img {
+            object-position: 50% 48%;
+        }
+
+        .visual-caption {
+            position: absolute;
+            right: 18px;
+            bottom: 18px;
+            left: 18px;
+            z-index: 2;
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 20px;
+            color: rgba(255, 255, 255, .92);
+            font: 650 9px/1.2 var(--mono);
+            letter-spacing: .11em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 18px rgba(0, 0, 0, .8);
+        }
+
+        .visual-caption span:last-child {
+            color: rgba(255, 255, 255, .58);
+            text-align: right;
         }
 
         .project-content {
@@ -639,156 +701,6 @@
         .project:hover .arrow {
             transform: translate(4px, -4px);
         }
-
-        .contours {
-            background:
-                radial-gradient(ellipse at 52% 54%, transparent 0 10%, rgba(66, 213, 255, .72) 10.3% 10.7%, transparent 11% 19%, rgba(66, 213, 255, .5) 19.3% 19.7%, transparent 20% 29%, rgba(66, 213, 255, .32) 29.3% 29.7%, transparent 30% 42%, rgba(66, 213, 255, .18) 42.3% 42.7%, transparent 43%),
-                linear-gradient(155deg, #07171d, #101c26 55%, #071015);
-        }
-
-        .contours::before {
-            position: absolute;
-            inset: 11%;
-            border: 1px solid rgba(66, 213, 255, .24);
-            content: "";
-            transform: rotate(-7deg);
-        }
-
-        .depth-readout {
-            position: relative;
-            color: var(--cyan);
-            font: 500 clamp(48px, 7vw, 90px)/1 var(--mono);
-            letter-spacing: -.08em;
-            text-shadow: 0 0 30px rgba(66, 213, 255, .25);
-        }
-
-        .depth-readout span {
-            font-size: .18em;
-            letter-spacing: .14em;
-            vertical-align: top;
-        }
-
-        .cipher {
-            grid-template-columns: repeat(12, 1fr);
-            gap: 5px;
-            padding: 12%;
-            background: linear-gradient(145deg, #17131c, #0c0b10);
-        }
-
-        .cipher span {
-            width: 100%;
-            aspect-ratio: 1;
-            background: rgba(168, 121, 255, .08);
-            transition: background .25s ease, box-shadow .25s ease;
-        }
-
-        .cipher span:nth-child(3n),
-        .cipher span:nth-child(7n) {
-            background: rgba(168, 121, 255, .45);
-            box-shadow: 0 0 15px rgba(168, 121, 255, .13);
-        }
-
-        .cipher span:nth-child(11n) {
-            background: var(--violet);
-            box-shadow: 0 0 18px rgba(168, 121, 255, .48);
-        }
-
-        .project:hover .cipher span:nth-child(5n) {
-            background: rgba(66, 213, 255, .62);
-        }
-
-        .iso {
-            background-color: #152215;
-            background-image:
-                linear-gradient(30deg, rgba(200,255,61,.13) 12%, transparent 12.5%, transparent 87%, rgba(200,255,61,.13) 87.5%, rgba(200,255,61,.13)),
-                linear-gradient(150deg, rgba(200,255,61,.13) 12%, transparent 12.5%, transparent 87%, rgba(200,255,61,.13) 87.5%, rgba(200,255,61,.13)),
-                linear-gradient(30deg, rgba(200,255,61,.13) 12%, transparent 12.5%, transparent 87%, rgba(200,255,61,.13) 87.5%, rgba(200,255,61,.13)),
-                linear-gradient(150deg, rgba(200,255,61,.13) 12%, transparent 12.5%, transparent 87%, rgba(200,255,61,.13) 87.5%, rgba(200,255,61,.13));
-            background-position: 0 0, 0 0, 32px 56px, 32px 56px;
-            background-size: 64px 112px;
-        }
-
-        .iso-course {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            border: 1px solid rgba(200,255,61,.45);
-            background: linear-gradient(135deg, rgba(200,255,61,.52), rgba(43,111,49,.55));
-            box-shadow: 24px 28px 0 rgba(0,0,0,.28);
-            transform: rotate(30deg) skewX(-30deg) scaleY(.86);
-        }
-
-        .iso-course::before {
-            position: absolute;
-            top: 28px;
-            right: 40px;
-            width: 38px;
-            height: 56px;
-            border-radius: 50%;
-            background: #d6f69b;
-            content: "";
-            transform: skewX(30deg) rotate(-30deg);
-        }
-
-        .iso-course::after {
-            position: absolute;
-            right: 54px;
-            bottom: 38px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #184a9c;
-            content: "";
-            box-shadow: 0 0 0 5px rgba(66, 213, 255, .12);
-        }
-
-        .terminal {
-            padding: 12%;
-            background: linear-gradient(145deg, #121212, #090909);
-        }
-
-        .terminal-window {
-            width: min(420px, 90%);
-            padding: 18px;
-            border: 1px solid rgba(255, 59, 48, .34);
-            background: rgba(0, 0, 0, .72);
-            box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
-            font: 500 10px/1.7 var(--mono);
-        }
-
-        .terminal-top {
-            display: flex;
-            gap: 6px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--line);
-        }
-
-        .terminal-top i {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--quiet);
-        }
-
-        .terminal-top i:first-child { background: var(--red); }
-        .terminal-top i:nth-child(2) { background: #ffb02e; }
-        .terminal-top i:last-child { background: var(--lime); }
-
-        .terminal-line {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-top: 14px;
-            color: var(--quiet);
-        }
-
-        .terminal-line strong {
-            color: var(--paper);
-            font-weight: 500;
-        }
-
-        .terminal-line .ok { color: var(--lime); }
-        .terminal-line .active { color: var(--red); }
 
         .about {
             display: grid;
@@ -1095,8 +1007,9 @@
 
             <div class="projects-grid">
                 <a class="project reveal" href="https://github.com/hindfelt/drained-seabed-explorer" target="_blank" rel="noopener noreferrer" aria-labelledby="seabed-title">
-                    <div class="project-visual contours" aria-hidden="true">
-                        <div class="depth-readout">−53<span>M / ØRESUND</span></div>
+                    <div class="project-visual visual-seabed">
+                        <img src="/static/portfolio/drained-seabed.webp" alt="Drained 3D terrain of the Öresund with labeled shipwrecks" width="640" height="353" loading="lazy" decoding="async">
+                        <div class="visual-caption"><span>Recorded tour</span><span>Öresund / 56° N</span></div>
                     </div>
                     <div class="project-content">
                         <div class="project-meta"><span>Open source / 2026</span><span>JavaScript</span></div>
@@ -1107,13 +1020,9 @@
                 </a>
 
                 <a class="project reveal" href="https://github.com/hindfelt/TeamVideoDownloader" target="_blank" rel="noopener noreferrer" aria-labelledby="teams-title">
-                    <div class="project-visual cipher" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    <div class="project-visual visual-teams">
+                        <img src="/static/portfolio/team-video-downloader.webp" alt="Teams recording page with the downloader extension open" width="1280" height="800" loading="lazy" decoding="async">
+                        <div class="visual-caption"><span>Product capture</span><span>Chrome / Teams</span></div>
                     </div>
                     <div class="project-content">
                         <div class="project-meta"><span>Open source / 2026</span><span>Chrome MV3</span></div>
@@ -1124,8 +1033,9 @@
                 </a>
 
                 <a class="project reveal" href="https://github.com/hindfelt/simgolf" target="_blank" rel="noopener noreferrer" aria-labelledby="simgolf-title">
-                    <div class="project-visual iso" aria-hidden="true">
-                        <div class="iso-course"></div>
+                    <div class="project-visual visual-golf">
+                        <img src="/static/portfolio/fairway-mogul.webp" alt="Fairway Mogul world map over an isometric golf course" width="1440" height="900" loading="lazy" decoding="async">
+                        <div class="visual-caption"><span>Live capture</span><span>Maple Crossing / Year 1</span></div>
                     </div>
                     <div class="project-content">
                         <div class="project-meta"><span>Open source / 2026</span><span>React + Canvas</span></div>
@@ -1136,14 +1046,9 @@
                 </a>
 
                 <a class="project reveal" href="https://github.com/hindfelt/MediaMarauder" target="_blank" rel="noopener noreferrer" aria-labelledby="marauder-title">
-                    <div class="project-visual terminal" aria-hidden="true">
-                        <div class="terminal-window">
-                            <div class="terminal-top"><i></i><i></i><i></i></div>
-                            <div class="terminal-line"><span>QUEUE / 01</span><strong class="active">PROCESSING</strong></div>
-                            <div class="terminal-line"><span>STREAM</span><strong>captured</strong></div>
-                            <div class="terminal-line"><span>SUBTITLES</span><strong>embedded</strong></div>
-                            <div class="terminal-line"><span>OUTPUT</span><strong class="ok">READY ✓</strong></div>
-                        </div>
+                    <div class="project-visual visual-marauder">
+                        <img src="/static/portfolio/mediamarauder.webp" alt="MediaMarauder extension sending a video to a self-hosted server" width="1280" height="800" loading="lazy" decoding="async">
+                        <div class="visual-caption"><span>Published extension</span><span>Browser → homelab</span></div>
                     </div>
                     <div class="project-content">
                         <div class="project-meta"><span>Open source / Live</span><span>Python + Flask</span></div>
