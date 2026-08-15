@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#061128">
+    <meta name="description" content="ZieApp is the live operating system behind the SIGInt advisory network—signal, events, contributions, expertise, and SIE reporting in one focused product.">
+    <meta property="og:title" content="ZieApp — Product case study | 0x4d.in">
+    <meta property="og:description" content="One focused product for an active advisory network. Explore the member experience, reporting system, and operational platform.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://0x4d.in/work/zieapp">
+    <meta property="og:image" content="https://0x4d.in/static/portfolio/zieapp/zieapp-reporting.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>ZieApp — Product case study | 0x4d.in</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --night: #030817;
+            --navy: #061128;
+            --blue: #66a3ff;
+            --blue-bright: #9cc5ff;
+            --paper: #f3f5f8;
+            --muted: #9ba8ba;
+            --quiet: #65738a;
+            --line: rgba(190, 215, 255, .15);
+            --line-strong: rgba(190, 215, 255, .28);
+            --panel: rgba(10, 26, 57, .72);
+            --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--night);
+        }
+
+        body {
+            margin: 0;
+            min-width: 320px;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 72% 4%, rgba(54, 120, 255, .18), transparent 34rem),
+                var(--night);
+            color: var(--paper);
+            font-family: var(--sans);
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        body::before {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: linear-gradient(to bottom, black, transparent 78%);
+            content: "";
+            pointer-events: none;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        :focus-visible {
+            outline: 2px solid var(--blue-bright);
+            outline-offset: 5px;
+        }
+
+        ::selection { background: var(--blue); color: #031027; }
+
+        img { display: block; max-width: 100%; }
+
+        .skip-link {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            z-index: 100;
+            padding: 10px 14px;
+            background: var(--paper);
+            color: var(--night);
+            font: 700 11px/1 var(--mono);
+            transform: translateY(-160%);
+        }
+
+        .skip-link:focus { transform: translateY(0); }
+
+        .shell {
+            width: min(1480px, 100%);
+            margin-inline: auto;
+            padding-inline: clamp(20px, 4vw, 64px);
+        }
+
+        .nav-wrap {
+            position: relative;
+            z-index: 20;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 88px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .wordmark {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 2px;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -.07em;
+        }
+
+        .wordmark span:last-child { color: var(--blue); }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: clamp(18px, 3vw, 40px);
+            font: 650 10px/1 var(--mono);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .back-link { color: var(--muted); transition: color .2s ease; }
+        .back-link:hover { color: var(--paper); }
+
+        .live-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 17px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            transition: border-color .2s ease, background .2s ease;
+        }
+
+        .live-link::before {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #70ffb2;
+            box-shadow: 0 0 16px rgba(112, 255, 178, .85);
+            content: "";
+        }
+
+        .live-link:hover {
+            border-color: rgba(156, 197, 255, .6);
+            background: rgba(102, 163, 255, .08);
+        }
+
+        .hero {
+            position: relative;
+            min-height: min(880px, calc(100svh - 88px));
+            display: grid;
+            grid-template-columns: minmax(0, .92fr) minmax(480px, 1.08fr);
+            align-items: center;
+            gap: clamp(40px, 7vw, 112px);
+            padding-block: clamp(76px, 10vh, 128px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .eyebrow,
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 30px;
+            color: var(--blue-bright);
+            font: 650 10px/1.3 var(--mono);
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before,
+        .section-label::before {
+            width: 32px;
+            height: 1px;
+            background: currentColor;
+            content: "";
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(76px, 10.4vw, 158px);
+            font-weight: 730;
+            letter-spacing: -.08em;
+            line-height: .76;
+        }
+
+        h1 span {
+            display: block;
+            margin-top: .22em;
+            color: transparent;
+            font-size: .36em;
+            font-weight: 580;
+            letter-spacing: -.055em;
+            line-height: 1;
+            -webkit-text-stroke: 1px rgba(243, 245, 248, .6);
+        }
+
+        .hero-copy {
+            max-width: 590px;
+            margin: 42px 0 0;
+            color: var(--muted);
+            font-size: clamp(18px, 1.8vw, 24px);
+            line-height: 1.5;
+        }
+
+        .hero-copy strong { color: var(--paper); font-weight: 560; }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 36px;
+        }
+
+        .hero-meta span {
+            padding: 9px 12px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--muted);
+            font: 600 9px/1 var(--mono);
+            letter-spacing: .11em;
+            text-transform: uppercase;
+        }
+
+        .hero-art {
+            position: relative;
+            min-height: 660px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background:
+                radial-gradient(circle at center, rgba(74, 137, 255, .22), transparent 38%),
+                linear-gradient(145deg, #0a2453, #020817 70%);
+            isolation: isolate;
+        }
+
+        .hero-art::before {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px);
+            background-size: 54px 54px;
+            content: "";
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 66%;
+            aspect-ratio: 1;
+            border: 1px solid rgba(145, 190, 255, .25);
+            border-radius: 50%;
+            box-shadow: 0 0 0 70px rgba(102, 163, 255, .045), 0 0 0 140px rgba(102, 163, 255, .025);
+            transform: translate(-50%, -50%);
+        }
+
+        .device {
+            position: absolute;
+            overflow: hidden;
+            border: 8px solid #08101d;
+            border-radius: 34px;
+            background: #08101d;
+            box-shadow: 0 38px 100px rgba(0, 0, 0, .58), 0 0 0 1px rgba(255, 255, 255, .18);
+        }
+
+        .device img { width: 100%; height: 100%; object-fit: cover; }
+
+        .device-primary {
+            top: 9%;
+            left: 12%;
+            z-index: 2;
+            width: min(38%, 270px);
+            aspect-ratio: 780 / 1688;
+            transform: rotate(-4deg);
+        }
+
+        .device-secondary {
+            right: 10%;
+            bottom: -8%;
+            z-index: 1;
+            width: min(36%, 258px);
+            aspect-ratio: 780 / 1688;
+            transform: rotate(5deg);
+        }
+
+        .art-note {
+            position: absolute;
+            right: 22px;
+            bottom: 20px;
+            z-index: 4;
+            color: rgba(255, 255, 255, .64);
+            font: 600 9px/1 var(--mono);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            writing-mode: vertical-rl;
+        }
+
+        .facts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .fact {
+            min-height: 180px;
+            padding: clamp(24px, 3vw, 42px);
+            border-left: 1px solid var(--line);
+        }
+
+        .fact strong {
+            display: block;
+            margin-bottom: 20px;
+            font-size: clamp(28px, 3.2vw, 48px);
+            font-weight: 620;
+            letter-spacing: -.055em;
+        }
+
+        .fact span {
+            color: var(--quiet);
+            font: 600 9px/1.45 var(--mono);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .section {
+            padding-block: clamp(100px, 13vw, 190px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section-head {
+            display: grid;
+            grid-template-columns: minmax(180px, .4fr) minmax(0, 1fr);
+            gap: clamp(40px, 8vw, 130px);
+            align-items: start;
+            margin-bottom: clamp(64px, 9vw, 124px);
+        }
+
+        .section-label { margin: 11px 0 0; color: var(--quiet); }
+
+        .section-title {
+            max-width: 980px;
+            margin: 0;
+            font-size: clamp(42px, 6.7vw, 96px);
+            font-weight: 560;
+            letter-spacing: -.065em;
+            line-height: .98;
+        }
+
+        .section-title span { color: var(--quiet); }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--line);
+            border-left: 1px solid var(--line);
+        }
+
+        .capability {
+            min-height: 360px;
+            padding: clamp(28px, 3.4vw, 48px);
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: linear-gradient(145deg, rgba(15, 37, 78, .42), rgba(3, 8, 23, .1));
+        }
+
+        .capability-number {
+            color: var(--blue);
+            font: 600 10px/1 var(--mono);
+            letter-spacing: .14em;
+        }
+
+        .capability h3 {
+            margin: 72px 0 18px;
+            font-size: clamp(28px, 3vw, 42px);
+            font-weight: 580;
+            letter-spacing: -.045em;
+        }
+
+        .capability p {
+            max-width: 38ch;
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.65;
+        }
+
+        .mobile-gallery {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: clamp(12px, 2.4vw, 34px);
+            align-items: start;
+            margin-top: clamp(74px, 9vw, 126px);
+            padding: clamp(28px, 4vw, 62px);
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background:
+                radial-gradient(circle at 50% 45%, rgba(51, 118, 255, .18), transparent 34%),
+                #061128;
+        }
+
+        .mobile-gallery::before {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+            background-size: 56px 56px;
+            content: "";
+        }
+
+        .phone-shot {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            border: clamp(4px, .5vw, 7px) solid #080f1c;
+            border-radius: clamp(16px, 2.1vw, 30px);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, .42), 0 0 0 1px rgba(255, 255, 255, .12);
+        }
+
+        .phone-shot:nth-child(2), .phone-shot:nth-child(4) { margin-top: 62px; }
+
+        .phone-label {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            z-index: 2;
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 999px;
+            background: rgba(3, 8, 23, .82);
+            color: rgba(255, 255, 255, .74);
+            font: 600 8px/1 var(--mono);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+        }
+
+        .reporting {
+            background: linear-gradient(to bottom, rgba(8, 27, 63, .5), transparent 40%);
+        }
+
+        .reporting-copy {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(300px, .58fr);
+            gap: clamp(40px, 8vw, 120px);
+            align-items: end;
+            margin-bottom: 70px;
+        }
+
+        .reporting-copy h2 {
+            margin: 0;
+            font-size: clamp(58px, 9vw, 136px);
+            font-weight: 660;
+            letter-spacing: -.075em;
+            line-height: .82;
+        }
+
+        .reporting-copy h2 span {
+            display: block;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(243, 245, 248, .42);
+        }
+
+        .reporting-copy p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .desktop-stage {
+            position: relative;
+            min-height: clamp(600px, 68vw, 940px);
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background:
+                radial-gradient(circle at 44% 36%, rgba(54, 120, 255, .18), transparent 36%),
+                #040c1d;
+        }
+
+        .desktop-stage::before {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+            background-size: 64px 64px;
+            content: "";
+        }
+
+        .browser-shot {
+            position: absolute;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 36px 100px rgba(0, 0, 0, .58);
+        }
+
+        .browser-shot::before {
+            display: block;
+            height: 28px;
+            background:
+                radial-gradient(circle at 16px 14px, #ff665f 3px, transparent 4px),
+                radial-gradient(circle at 29px 14px, #ffbd44 3px, transparent 4px),
+                radial-gradient(circle at 42px 14px, #00ca4e 3px, transparent 4px),
+                #e9edf4;
+            content: "";
+        }
+
+        .browser-shot img { width: 100%; }
+
+        .shot-receipts {
+            top: 9%;
+            left: 5%;
+            z-index: 2;
+            width: 71%;
+            transform: rotate(-1.5deg);
+        }
+
+        .shot-time {
+            right: -6%;
+            bottom: 8%;
+            z-index: 3;
+            width: 56%;
+            transform: rotate(2deg);
+        }
+
+        .shot-upload {
+            bottom: -18%;
+            left: 11%;
+            z-index: 1;
+            width: 52%;
+            transform: rotate(-3deg);
+            opacity: .72;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin-top: 70px;
+            border-top: 1px solid var(--line);
+            border-left: 1px solid var(--line);
+        }
+
+        .workflow-step {
+            position: relative;
+            min-height: 240px;
+            padding: 34px;
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .workflow-step:not(:last-child)::after {
+            position: absolute;
+            top: 36px;
+            right: -9px;
+            z-index: 2;
+            display: grid;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--line-strong);
+            border-radius: 50%;
+            background: var(--night);
+            color: var(--blue);
+            content: "→";
+            font: 600 10px/1 var(--mono);
+            place-items: center;
+        }
+
+        .workflow-step span {
+            color: var(--blue);
+            font: 600 9px/1 var(--mono);
+            letter-spacing: .12em;
+        }
+
+        .workflow-step h3 {
+            margin: 56px 0 12px;
+            font-size: 21px;
+            font-weight: 580;
+            letter-spacing: -.03em;
+        }
+
+        .workflow-step p {
+            margin: 0;
+            color: var(--quiet);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+            gap: clamp(60px, 10vw, 150px);
+            align-items: start;
+        }
+
+        .platform-sticky {
+            position: sticky;
+            top: 60px;
+        }
+
+        .platform-sticky h2 {
+            margin: 0;
+            font-size: clamp(52px, 7.5vw, 108px);
+            font-weight: 580;
+            letter-spacing: -.07em;
+            line-height: .9;
+        }
+
+        .platform-sticky h2 span { color: var(--quiet); }
+
+        .platform-sticky p {
+            max-width: 38ch;
+            margin: 34px 0 0;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .platform-list { border-top: 1px solid var(--line); }
+
+        .platform-item {
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            gap: 24px;
+            padding-block: 38px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .platform-item > span {
+            color: var(--blue);
+            font: 600 10px/1 var(--mono);
+        }
+
+        .platform-item h3 {
+            margin: 0 0 10px;
+            font-size: clamp(24px, 2.6vw, 38px);
+            font-weight: 560;
+            letter-spacing: -.04em;
+        }
+
+        .platform-item p {
+            max-width: 56ch;
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 34px;
+        }
+
+        .stack span {
+            padding: 11px 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--muted);
+            font: 600 9px/1 var(--mono);
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .closing {
+            position: relative;
+            display: grid;
+            min-height: 680px;
+            overflow: hidden;
+            place-items: center;
+            text-align: center;
+        }
+
+        .closing::before {
+            position: absolute;
+            width: 580px;
+            aspect-ratio: 1;
+            border: 1px solid rgba(102, 163, 255, .2);
+            border-radius: 50%;
+            box-shadow: 0 0 0 90px rgba(102,163,255,.035), 0 0 0 180px rgba(102,163,255,.02);
+            content: "";
+        }
+
+        .closing-inner { position: relative; z-index: 1; }
+
+        .closing h2 {
+            max-width: 980px;
+            margin: 0 auto 46px;
+            font-size: clamp(58px, 9.2vw, 132px);
+            font-weight: 620;
+            letter-spacing: -.075em;
+            line-height: .88;
+        }
+
+        .closing-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 28px;
+            padding: 17px 22px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            color: var(--blue-bright);
+            font: 650 10px/1 var(--mono);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            transition: background .2s ease, border-color .2s ease;
+        }
+
+        .closing-link:hover { background: rgba(102, 163, 255, .1); border-color: var(--blue); }
+        .closing-link span { font-size: 18px; }
+
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            min-height: 120px;
+            border-top: 1px solid var(--line);
+            color: var(--quiet);
+            font: 600 9px/1.4 var(--mono);
+            letter-spacing: .11em;
+            text-transform: uppercase;
+        }
+
+        .js .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1);
+        }
+
+        .js .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 1000px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-art { min-height: 680px; }
+            .facts { grid-template-columns: repeat(2, 1fr); }
+            .intro-grid { grid-template-columns: repeat(2, 1fr); }
+            .mobile-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .phone-shot:nth-child(2), .phone-shot:nth-child(4) { margin-top: 42px; }
+            .reporting-copy { grid-template-columns: 1fr; }
+            .workflow { grid-template-columns: repeat(2, 1fr); }
+            .workflow-step:nth-child(2)::after { display: none; }
+            .platform-grid { grid-template-columns: 1fr; }
+            .platform-sticky { position: static; }
+        }
+
+        @media (max-width: 700px) {
+            .nav { min-height: 72px; }
+            .back-link { display: none; }
+            .live-link { padding: 11px 13px; font-size: 8px; }
+            .hero { padding-block: 70px; }
+            h1 { font-size: clamp(70px, 23vw, 112px); }
+            .hero-copy { font-size: 18px; }
+            .hero-art { min-height: 510px; }
+            .device-primary { left: 9%; width: 44%; }
+            .device-secondary { right: 8%; width: 42%; }
+            .facts { grid-template-columns: 1fr; }
+            .fact { min-height: 140px; }
+            .section-head { grid-template-columns: 1fr; }
+            .intro-grid { grid-template-columns: 1fr; }
+            .capability { min-height: 300px; }
+            .capability h3 { margin-top: 50px; }
+            .mobile-gallery { gap: 12px; padding: 16px; }
+            .phone-shot:nth-child(2), .phone-shot:nth-child(4) { margin-top: 24px; }
+            .phone-label { display: none; }
+            .desktop-stage { min-height: 520px; }
+            .shot-receipts { top: 8%; left: 4%; width: 90%; }
+            .shot-time { right: -10%; bottom: 7%; width: 82%; }
+            .shot-upload { display: none; }
+            .workflow { grid-template-columns: 1fr; }
+            .workflow-step { min-height: 205px; }
+            .workflow-step::after { display: none !important; }
+            .platform-item { grid-template-columns: 40px 1fr; gap: 12px; }
+            .closing { min-height: 560px; }
+            .closing::before { width: 330px; }
+            .footer { align-items: flex-start; flex-direction: column; justify-content: center; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+        }
+    </style>
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to case study</a>
+
+    <header class="nav-wrap shell">
+        <nav class="nav" aria-label="Primary navigation">
+            <a class="wordmark" href="/landing" aria-label="0x4d.in selected work"><span>0x4d</span><span>.in</span></a>
+            <div class="nav-actions">
+                <a class="back-link" href="/landing#work">← Selected work</a>
+                <a class="live-link" href="https://triton-skunk.work" target="_blank" rel="noopener noreferrer">Open live app ↗</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <section class="hero shell">
+            <div class="hero-text reveal">
+                <p class="eyebrow">Product case study / Live</p>
+                <h1>ZieApp<span>SIGInt network</span></h1>
+                <p class="hero-copy"><strong>The advisory network, finally in one place.</strong> ZieApp powers SIGInt with a focused member experience and an operational system behind it—from insight and events to expenses and approvals.</p>
+                <div class="hero-meta" aria-label="Product characteristics">
+                    <span>Telegram + Web</span>
+                    <span>Private source</span>
+                    <span>EU data residency</span>
+                </div>
+            </div>
+            <div class="hero-art reveal" aria-label="ZieApp member interface previews">
+                <span class="orbit" aria-hidden="true"></span>
+                <div class="device device-primary"><img src="/static/portfolio/zieapp/zieapp-signal.webp" alt="SIGInt member signal feed showing a featured interview and network news" width="780" height="1688" decoding="async" fetchpriority="high"></div>
+                <div class="device device-secondary"><img src="/static/portfolio/zieapp/zieapp-criteria.webp" alt="SIGInt investment criteria reference in the member app" width="780" height="1688" decoding="async"></div>
+                <span class="art-note">Authentic product captures / 2026</span>
+            </div>
+        </section>
+
+        <section class="facts shell" aria-label="Product facts">
+            <div class="fact reveal"><strong>3</strong><span>Connected surfaces<br>member · admin · automation</span></div>
+            <div class="fact reveal"><strong>44</strong><span>Purpose-built<br>administration tools</span></div>
+            <div class="fact reveal"><strong>EU</strong><span>Database and object<br>storage residency</span></div>
+            <div class="fact reveal"><strong>Live</strong><span>Production product<br>private source</span></div>
+        </section>
+
+        <section class="section shell" id="experience">
+            <div class="section-head reveal">
+                <p class="section-label">01 / Member experience</p>
+                <h2 class="section-title">Designed around the jobs an active network <span>actually needs to do.</span></h2>
+            </div>
+
+            <div class="intro-grid">
+                <article class="capability reveal">
+                    <span class="capability-number">01</span>
+                    <h3>Signal</h3>
+                    <p>An editorial feed for podcasts, articles, video, and network updates. Content can be categorized, pinned, and targeted without turning the product into another noisy social feed.</p>
+                </article>
+                <article class="capability reveal">
+                    <span class="capability-number">02</span>
+                    <h3>Events</h3>
+                    <p>Role-aware invitations with agenda, location, categories, and RSVP. Members see what is relevant to them and can respond without leaving the app.</p>
+                </article>
+                <article class="capability reveal">
+                    <span class="capability-number">03</span>
+                    <h3>Domain asks</h3>
+                    <p>Focused expertise requests let members rate their knowledge, add context, and surface where the network can help. Administrators can prioritize the most important asks.</p>
+                </article>
+                <article class="capability reveal">
+                    <span class="capability-number">04</span>
+                    <h3>Contribute</h3>
+                    <p>A structured path for company tips and candidate referrals, including notes and optional CV material. Good network intelligence lands in the right workflow.</p>
+                </article>
+                <article class="capability reveal">
+                    <span class="capability-number">05</span>
+                    <h3>Criteria</h3>
+                    <p>A concise, always-current reference for the investment thesis. Members can qualify an idea before submitting it instead of hunting through an old presentation.</p>
+                </article>
+                <article class="capability reveal">
+                    <span class="capability-number">06</span>
+                    <h3>One identity</h3>
+                    <p>Signed Telegram authentication inside the Mini App, email one-time codes in the browser, and session continuity across the experience—without exposing the system behind it.</p>
+                </article>
+            </div>
+
+            <div class="mobile-gallery reveal" aria-label="ZieApp member interface gallery">
+                <figure class="phone-shot"><img src="/static/portfolio/zieapp/zieapp-signal.webp" alt="SIGInt signal feed" width="780" height="1688" loading="lazy" decoding="async"><figcaption class="phone-label">Signal</figcaption></figure>
+                <figure class="phone-shot"><img src="/static/portfolio/zieapp/zieapp-events.webp" alt="SIGInt events list" width="780" height="1688" loading="lazy" decoding="async"><figcaption class="phone-label">Events</figcaption></figure>
+                <figure class="phone-shot"><img src="/static/portfolio/zieapp/zieapp-contribute.webp" alt="SIGInt contribution options for company tips and candidate referrals" width="780" height="1688" loading="lazy" decoding="async"><figcaption class="phone-label">Contribute</figcaption></figure>
+                <figure class="phone-shot"><img src="/static/portfolio/zieapp/zieapp-criteria.webp" alt="SIGInt investment criteria" width="780" height="1688" loading="lazy" decoding="async"><figcaption class="phone-label">Criteria</figcaption></figure>
+            </div>
+        </section>
+
+        <section class="section reporting" id="reporting">
+            <div class="shell">
+                <div class="reporting-copy reveal">
+                    <h2>SIE<span>reporting</span></h2>
+                    <p>Reporting lives inside the same product. Members capture receipts, log project time, follow approval status, and resubmit rejected items. The design keeps routine administration fast on both mobile and desktop.</p>
+                </div>
+
+                <div class="desktop-stage reveal" aria-label="SIE reporting interface previews">
+                    <div class="browser-shot shot-receipts"><img src="/static/portfolio/zieapp/zieapp-reporting.webp" alt="Receipt reporting dashboard with submitted expenses and status" width="1600" height="1125" loading="lazy" decoding="async"></div>
+                    <div class="browser-shot shot-time"><img src="/static/portfolio/zieapp/zieapp-time.webp" alt="Weekly time reporting grid organized by project" width="1600" height="1125" loading="lazy" decoding="async"></div>
+                    <div class="browser-shot shot-upload"><img src="/static/portfolio/zieapp/zieapp-receipt-upload.webp" alt="Receipt upload flow with automatic field extraction" width="1600" height="1125" loading="lazy" decoding="async"></div>
+                </div>
+
+                <div class="workflow" aria-label="Reporting workflow">
+                    <article class="workflow-step reveal"><span>01 / CAPTURE</span><h3>Upload the evidence</h3><p>Multiple attachments, receipt details, and project context enter one guided flow.</p></article>
+                    <article class="workflow-step reveal"><span>02 / EXTRACT</span><h3>Let AI do the typing</h3><p>Receipt data is interpreted automatically, while the member stays in control of the final values.</p></article>
+                    <article class="workflow-step reveal"><span>03 / REVIEW</span><h3>Approve with context</h3><p>Staff review a purpose-built queue with clear project, member, status, and documentation context.</p></article>
+                    <article class="workflow-step reveal"><span>04 / EXPORT</span><h3>Close the month</h3><p>Approved time and expenses become a structured finance bundle instead of a manual scavenger hunt.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section shell" id="platform">
+            <div class="platform-grid">
+                <div class="platform-sticky reveal">
+                    <p class="eyebrow">02 / Operational platform</p>
+                    <h2>Quietly<br><span>capable.</span></h2>
+                    <p>The calm member interface sits on top of a serious administration and automation layer. Every surface shares the same access model and source of truth.</p>
+                    <div class="stack" aria-label="Technology stack">
+                        <span>React 19</span><span>TypeScript</span><span>Vite</span><span>Hono</span><span>Cloudflare Workers</span><span>D1</span><span>R2</span><span>Resend</span><span>MCP</span>
+                    </div>
+                </div>
+
+                <div class="platform-list">
+                    <article class="platform-item reveal"><span>01</span><div><h3>Role-aware administration</h3><p>Content, events, expertise requests, contributions, members, projects, and reporting live in one protected control plane. Audience and role filters stay consistent from creation to delivery.</p></div></article>
+                    <article class="platform-item reveal"><span>02</span><div><h3>Reporting operations</h3><p>Administrators assign members to projects, review submissions, return items with reasons, and assemble the monthly finance hand-off without manipulating parallel spreadsheets.</p></div></article>
+                    <article class="platform-item reveal"><span>03</span><div><h3>Automation through MCP</h3><p>A remote, authenticated tool surface makes the same administrative capabilities available to trusted AI workflows. Forty-four narrow tools favor explicit operations over broad access.</p></div></article>
+                    <article class="platform-item reveal"><span>04</span><div><h3>Authentication at the edge</h3><p>Telegram signed data serves the Mini App, email OTP serves the browser, and Cloudflare Access protects staff surfaces. Rate limits and session controls sit close to the request boundary.</p></div></article>
+                    <article class="platform-item reveal"><span>05</span><div><h3>Privacy and traceability</h3><p>Member targeting is enforced by role and audience. EU-hosted database and object storage keep product data regionally placed, while audit logging records sensitive administrative actions.</p></div></article>
+                    <article class="platform-item reveal"><span>06</span><div><h3>One deployable system</h3><p>The React member app, protected admin, Workers API, relational data, object storage, email delivery, and web push are designed as one product—not a collection of disconnected utilities.</p></div></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="closing shell">
+            <div class="closing-inner reveal">
+                <p class="eyebrow" style="justify-content:center">Live product / Browser access</p>
+                <h2>One network.<br>Less friction.</h2>
+                <a class="closing-link" href="https://triton-skunk.work" target="_blank" rel="noopener noreferrer">Open ZieApp <span>↗</span></a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer shell">
+        <span>ZieApp / SIGInt network — Product case study</span>
+        <a href="/landing#work">← Back to selected work</a>
+        <span>0x4d.in / 2026</span>
+    </footer>
+
+    <script>
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const reveals = document.querySelectorAll('.reveal');
+
+        if (reducedMotion || !('IntersectionObserver' in window)) {
+            reveals.forEach((element) => element.classList.add('is-visible'));
+        } else {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: .08, rootMargin: '0px 0px -4% 0px' });
+
+            reveals.forEach((element) => observer.observe(element));
+        }
+    </script>
+</body>
+</html>
