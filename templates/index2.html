@@ -371,13 +371,118 @@
             left: clamp(24px, 4vw, 58px);
             width: min(27vw, 330px);
             aspect-ratio: 1;
-            border: 1px solid var(--line);
             border-radius: 50%;
             background:
-                radial-gradient(circle at 50% 50%, rgba(255,255,255,.9) 0 1px, transparent 2px),
-                conic-gradient(from 40deg, transparent, rgba(66,213,255,.5), transparent 28%, rgba(255,59,48,.45), transparent 66%);
-            mask-image: radial-gradient(circle, transparent 0 32%, black 33% 34%, transparent 35% 48%, black 49% 50%, transparent 51%);
-            animation: rotate 18s linear infinite;
+                linear-gradient(90deg, transparent calc(50% - .5px), rgba(242, 238, 230, .1) 50%, transparent calc(50% + .5px)),
+                linear-gradient(transparent calc(50% - .5px), rgba(242, 238, 230, .1) 50%, transparent calc(50% + .5px)),
+                radial-gradient(circle, transparent 0 20%, rgba(242, 238, 230, .08) 20.4% 20.8%, transparent 21.2% 36%, rgba(242, 238, 230, .08) 36.4% 36.8%, transparent 37.2% 49%, rgba(242, 238, 230, .12) 49.4% 49.8%, transparent 50.2%);
+            filter: drop-shadow(0 0 24px rgba(66, 213, 255, .08));
+        }
+
+        .signal-orbit::before,
+        .signal-orbit::after,
+        .orbit-ring,
+        .orbit-tracer,
+        .orbit-core {
+            position: absolute;
+            border-radius: 50%;
+            content: "";
+        }
+
+        .signal-orbit::before {
+            inset: 4%;
+            border: 1px dashed rgba(242, 238, 230, .12);
+            animation: signal-spin 24s linear infinite;
+        }
+
+        .signal-orbit::after {
+            inset: 11%;
+            background: conic-gradient(from 18deg, rgba(66, 213, 255, .2), transparent 12% 100%);
+            mask-image: radial-gradient(circle, transparent 0 46%, black 47% 49%, transparent 50%);
+            animation: signal-spin 7s linear infinite;
+        }
+
+        .orbit-ring {
+            inset: 0;
+            background: conic-gradient(
+                from 12deg,
+                transparent 0 5%,
+                rgba(66, 213, 255, .98) 8% 23%,
+                transparent 26% 46%,
+                rgba(255, 59, 48, .94) 49% 66%,
+                transparent 69% 100%
+            );
+            mask-image: radial-gradient(circle, transparent 0 47%, black 48% 49.5%, transparent 50.5%);
+            animation: signal-spin 10s linear infinite;
+        }
+
+        .orbit-ring-inner {
+            inset: 18%;
+            background: conic-gradient(
+                from -35deg,
+                transparent 0 10%,
+                rgba(255, 59, 48, .88) 13% 29%,
+                transparent 32% 62%,
+                rgba(66, 213, 255, .92) 65% 84%,
+                transparent 87% 100%
+            );
+            mask-image: radial-gradient(circle, transparent 0 45%, black 46% 49%, transparent 50%);
+            animation: signal-spin-reverse 6.5s linear infinite;
+        }
+
+        .orbit-tracer {
+            inset: 2%;
+            z-index: 2;
+            animation: signal-spin 5.5s linear infinite;
+        }
+
+        .orbit-tracer::before {
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            width: 9px;
+            aspect-ratio: 1;
+            border: 2px solid #07131d;
+            border-radius: 50%;
+            background: #d9f7ff;
+            box-shadow: 0 0 8px #42d5ff, 0 0 22px rgba(66, 213, 255, .9);
+            content: "";
+            transform: translateX(-50%);
+        }
+
+        .orbit-tracer-inner {
+            inset: 20%;
+            animation: signal-spin-reverse 4s linear infinite;
+        }
+
+        .orbit-tracer-inner::before {
+            top: -3px;
+            width: 7px;
+            border-color: #160b0b;
+            background: #ffd9d7;
+            box-shadow: 0 0 8px #ff3b30, 0 0 20px rgba(255, 59, 48, .85);
+        }
+
+        .orbit-core {
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+            width: 12px;
+            aspect-ratio: 1;
+            border: 1px solid rgba(242, 238, 230, .82);
+            background: var(--paper);
+            box-shadow: 0 0 12px rgba(242, 238, 230, .65), 0 0 34px rgba(66, 213, 255, .3);
+            transform: translate(-50%, -50%);
+            animation: signal-core 2.2s ease-in-out infinite;
+        }
+
+        .orbit-core::after {
+            position: absolute;
+            inset: -11px;
+            border: 1px solid rgba(242, 238, 230, .34);
+            border-radius: 50%;
+            content: "";
+            animation: signal-pulse 2.2s ease-out infinite;
         }
 
         .signal-number {
@@ -414,8 +519,22 @@
             font: 500 13px/1.2 var(--mono);
         }
 
-        @keyframes rotate {
+        @keyframes signal-spin {
             to { transform: rotate(360deg); }
+        }
+
+        @keyframes signal-spin-reverse {
+            to { transform: rotate(-360deg); }
+        }
+
+        @keyframes signal-core {
+            0%, 100% { opacity: .72; transform: translate(-50%, -50%) scale(.82); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+        }
+
+        @keyframes signal-pulse {
+            0% { opacity: .8; transform: scale(.45); }
+            75%, 100% { opacity: 0; transform: scale(1.65); }
         }
 
         .work {
@@ -1428,7 +1547,13 @@
             </div>
 
             <aside class="hero-signal reveal" aria-label="Portfolio details">
-                <div class="signal-orbit" aria-hidden="true"></div>
+                <div class="signal-orbit" aria-hidden="true">
+                    <span class="orbit-ring"></span>
+                    <span class="orbit-ring orbit-ring-inner"></span>
+                    <span class="orbit-tracer"></span>
+                    <span class="orbit-tracer orbit-tracer-inner"></span>
+                    <span class="orbit-core"></span>
+                </div>
                 <div class="signal-number" aria-hidden="true">4D</div>
                 <div class="signal-facts">
                     <p><span class="fact-label">Focus</span><span class="fact-value">Build → learn</span></p>
