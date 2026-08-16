@@ -422,10 +422,16 @@
         .phone-shot {
             position: relative;
             z-index: 1;
+            margin: 0;
             overflow: hidden;
             border: clamp(4px, .5vw, 7px) solid #080f1c;
             border-radius: clamp(16px, 2.1vw, 30px);
             box-shadow: 0 28px 70px rgba(0, 0, 0, .42), 0 0 0 1px rgba(255, 255, 255, .12);
+        }
+
+        .phone-shot img {
+            width: 100%;
+            height: auto;
         }
 
         .phone-shot:nth-child(2), .phone-shot:nth-child(4) { margin-top: 62px; }
@@ -517,7 +523,10 @@
             content: "";
         }
 
-        .browser-shot img { width: 100%; }
+        .browser-shot img {
+            width: 100%;
+            height: auto;
+        }
 
         .shot-receipts {
             top: 9%;
