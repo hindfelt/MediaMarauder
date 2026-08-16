@@ -792,6 +792,256 @@
             object-position: 50% 48%;
         }
 
+        .visual-outlook {
+            background:
+                radial-gradient(circle at 18% 18%, rgba(52, 124, 194, .3), transparent 36%),
+                radial-gradient(circle at 82% 78%, rgba(126, 91, 164, .2), transparent 38%),
+                linear-gradient(145deg, #102a43, #07111d 72%);
+        }
+
+        .visual-outlook::before {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px);
+            background-size: 28px 28px;
+            content: "";
+        }
+
+        .visual-outlook::after {
+            z-index: 1;
+            background: linear-gradient(to top, rgba(5, 12, 20, .72), transparent 40%);
+        }
+
+        .outlook-workflow {
+            position: absolute;
+            inset: 22px 22px 58px;
+            z-index: 2;
+            font-family: var(--mono);
+        }
+
+        .outlook-mail,
+        .obsidian-note {
+            position: absolute;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 7px;
+            box-shadow: 0 20px 44px rgba(0, 0, 0, .35);
+        }
+
+        .outlook-mail {
+            top: 0;
+            left: 0;
+            width: 45%;
+            padding: 15px;
+            background: rgba(242, 247, 251, .96);
+            color: #1d2d3d;
+            transform: rotate(-1.5deg);
+        }
+
+        .workflow-window-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: -15px -15px 13px;
+            padding: 10px 12px;
+            background: #1968a7;
+            color: white;
+            font-size: 8px;
+            font-weight: 750;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .workflow-window-head span:last-child {
+            color: rgba(255, 255, 255, .62);
+            font-size: 6px;
+        }
+
+        .mail-subject {
+            display: block;
+            overflow: hidden;
+            margin-bottom: 11px;
+            font: 760 11px/1.2 var(--sans);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mail-line {
+            display: block;
+            width: 100%;
+            height: 4px;
+            margin-top: 6px;
+            border-radius: 999px;
+            background: #c9d5df;
+        }
+
+        .mail-line.short {
+            width: 66%;
+        }
+
+        .mail-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 7px 9px;
+            border-radius: 4px;
+            background: #1968a7;
+            color: white;
+            font-size: 7px;
+            font-weight: 750;
+            letter-spacing: .04em;
+        }
+
+        .mail-action::before {
+            width: 5px;
+            height: 5px;
+            border: 1px solid currentColor;
+            border-radius: 1px;
+            content: "";
+        }
+
+        .agent-chain {
+            position: absolute;
+            top: 47%;
+            left: 26%;
+            z-index: 3;
+            display: grid;
+            width: 51%;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            align-items: center;
+            gap: 5px;
+            transform: translateY(-50%) rotate(-1deg);
+        }
+
+        .agent-node {
+            padding: 9px 6px;
+            border: 1px solid rgba(255, 255, 255, .22);
+            border-radius: 999px;
+            background: #12202d;
+            color: rgba(255, 255, 255, .92);
+            box-shadow: 0 9px 20px rgba(0, 0, 0, .38);
+            font-size: 7px;
+            font-weight: 720;
+            letter-spacing: .06em;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .agent-node span {
+            color: #75c4ff;
+        }
+
+        .agent-arrow {
+            color: rgba(255, 255, 255, .48);
+            font: 700 10px/1 var(--mono);
+        }
+
+        .obsidian-note {
+            right: 0;
+            bottom: 0;
+            width: 45%;
+            min-height: 128px;
+            padding: 15px;
+            background: rgba(242, 235, 223, .97);
+            color: #332e2a;
+            transform: rotate(1.5deg);
+        }
+
+        .obsidian-note-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+            color: #65528e;
+            font-size: 8px;
+            font-weight: 760;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .obsidian-note-head span:last-child {
+            color: #9a8f85;
+            font-size: 6px;
+        }
+
+        .obsidian-note strong {
+            display: block;
+            margin-bottom: 9px;
+            font: 760 11px/1 var(--sans);
+        }
+
+        .obsidian-note ul {
+            display: grid;
+            gap: 7px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .obsidian-note li {
+            display: flex;
+            gap: 6px;
+            color: #665f59;
+            font-size: 6.5px;
+            line-height: 1.35;
+        }
+
+        .obsidian-note li::before {
+            flex: 0 0 auto;
+            width: 7px;
+            height: 7px;
+            margin-top: 1px;
+            border: 1px solid #8f8276;
+            border-radius: 1px;
+            content: "";
+        }
+
+        .workflow-status {
+            position: absolute;
+            right: 3%;
+            bottom: -7px;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 9px;
+            border-radius: 999px;
+            background: #18231d;
+            color: #b8e3c5;
+            box-shadow: 0 7px 22px rgba(0, 0, 0, .34);
+            font-size: 6px;
+            font-weight: 740;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .workflow-status::before {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #63d48b;
+            box-shadow: 0 0 8px rgba(99, 212, 139, .8);
+            content: "";
+        }
+
+        .project:hover .outlook-mail {
+            transform: rotate(-2deg) translateY(-4px);
+        }
+
+        .project:hover .obsidian-note {
+            transform: rotate(2deg) translateY(-3px);
+        }
+
+        .outlook-mail,
+        .obsidian-note {
+            transition: transform .55s cubic-bezier(.2,.8,.2,1);
+        }
+
         .visual-caption {
             position: absolute;
             right: 18px;
@@ -1088,6 +1338,35 @@
                 min-height: 260px;
             }
 
+            .outlook-workflow {
+                inset: 18px 14px 52px;
+            }
+
+            .outlook-mail,
+            .obsidian-note {
+                width: 48%;
+                padding: 11px;
+            }
+
+            .workflow-window-head {
+                margin: -11px -11px 10px;
+                padding: 8px 9px;
+            }
+
+            .agent-chain {
+                left: 18%;
+                width: 64%;
+            }
+
+            .agent-node {
+                padding-inline: 4px;
+                font-size: 6px;
+            }
+
+            .obsidian-note {
+                min-height: 112px;
+            }
+
             .project-content {
                 padding: 28px 22px;
             }
@@ -1199,6 +1478,44 @@
                         <h3 id="zieapp-title">ZieApp</h3>
                         <p class="project-description">A focused operating system for an advisory network: editorial signal, targeted events, expertise requests, contribution funnels, and SIE reporting in one product.</p>
                         <div class="project-foot"><span>Read product case study</span><span class="arrow">→</span></div>
+                    </div>
+                </a>
+
+                <a class="project reveal" href="https://github.com/hindfelt/outlook2obsidian2do" target="_blank" rel="noopener noreferrer" aria-labelledby="outlook-obsidian-title">
+                    <div class="project-visual visual-outlook" aria-hidden="true">
+                        <div class="outlook-workflow">
+                            <div class="outlook-mail">
+                                <div class="workflow-window-head"><span>Outlook</span><span>Message</span></div>
+                                <strong class="mail-subject">Project follow-up</strong>
+                                <span class="mail-line"></span>
+                                <span class="mail-line"></span>
+                                <span class="mail-line short"></span>
+                                <span class="mail-action">Extract to-dos</span>
+                            </div>
+                            <div class="agent-chain">
+                                <span class="agent-node"><span>01</span> Extract</span>
+                                <span class="agent-arrow">→</span>
+                                <span class="agent-node"><span>02</span> Route</span>
+                                <span class="agent-arrow">→</span>
+                                <span class="agent-node"><span>03</span> Write</span>
+                            </div>
+                            <div class="obsidian-note">
+                                <div class="obsidian-note-head"><span>◇ Obsidian</span><span>Vault</span></div>
+                                <strong>TODO.md</strong>
+                                <ul>
+                                    <li>Review project assumptions</li>
+                                    <li>Send the revised timeline</li>
+                                </ul>
+                            </div>
+                            <span class="workflow-status">2 tasks written</span>
+                        </div>
+                        <div class="visual-caption"><span>Three-agent pipeline</span><span>Outlook → Obsidian</span></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-meta"><span>Public source / 2026</span><span>Python + Office.js</span></div>
+                        <h3 id="outlook-obsidian-title">Outlook → Obsidian To-Do</h3>
+                        <p class="project-description">One click turns an Outlook email into routed Obsidian tasks. A three-agent pipeline extracts, classifies, and safely appends checklist lines—using local Ollama or Claude.</p>
+                        <div class="project-foot"><span>Explore repository</span><span class="arrow">↗</span></div>
                     </div>
                 </a>
 
